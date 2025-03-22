@@ -14,7 +14,8 @@ namespace Neuro_Shoot_the_Drones
 {
     internal static class BulletHell
     {
-        static ConcurrentBag<PlayerBullet> PlayerBullets;
+        static List<PlayerBullet> PlayerBullets = new List<PlayerBullet>();
+        static List<PlayerBullet> BulletsToRemove = new();
         static List<EnemyBullet> EnemyBullets = new();
 
         public static void Draw(GameTime gameTime, SpriteBatch sb)
@@ -29,17 +30,19 @@ namespace Neuro_Shoot_the_Drones
         public static void Initialize()
         {
             PlayerBullets.Clear();
-            for (int i = 0; i < 200; i++)
-                PlayerBullets.Add(PlayerBulletFactory.CreateStandartPlayerBullet(Vector2.Zero));
         }
 
         public static void Update(GameTime gameTime)
         {
-            Parallel.ForEach(PlayerBullets, (PlayerBullet b) => 
+            foreach(PlayerBullet b in BulletsToRemove)
             {
-                if (b.IsActive)
-                    b.Update(gameTime);
-            });
+                PlayerBullets.Remove(b);
+            }
+            BulletsToRemove.Clear();
+            foreach(var bullet in PlayerBullets)
+            {
+                bullet.Update(gameTime);
+            }
         }
 
         public static void CreateEnemyBullet(EnemyBullet bullet)
@@ -48,9 +51,11 @@ namespace Neuro_Shoot_the_Drones
         
         public static void CreatePlayerBullet(Vector2 position)
         {
-            var bullet = PlayerBullets.First((b) => !b.IsActive);
-            bullet.Initialize();
-            bullet.UpdatePosition(position);
+            var b = PlayerBulletFactory.CreateStandartPlayerBullet(position);
+            PlayerBullets.Add(b);
+            b.Initialize();
+            b.UpdatePosition(position);
+            b.Destroy += () => BulletsToRemove.Add(b);
         }
 
         //public void CreatePattern(IBulletHellPattern pattern);
