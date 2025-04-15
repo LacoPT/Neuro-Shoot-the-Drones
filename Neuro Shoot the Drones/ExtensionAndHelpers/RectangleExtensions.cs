@@ -27,15 +27,5 @@ namespace Neuro_Shoot_the_Drones
         {
             return (rect.Center - rect.Location).ToVector2();
         }
-        
-        public static Vector2 GetRelativeCenter(this Rectangle rect, Vector2 scale)
-        {
-            return rect.GetRelativeCenter() * scale;
-        }
-
-        public static Vector2 GetRelativeCenter(this Rectangle rect, float scale)
-        {
-            return rect.GetRelativeCenter() * scale;
-        }
     }
 }

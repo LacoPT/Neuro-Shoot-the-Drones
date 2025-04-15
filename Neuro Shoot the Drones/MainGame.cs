@@ -13,8 +13,8 @@ namespace Neuro_Shoot_the_Drones
         public MainGame()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = 1920;
-            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.PreferredBackBufferWidth = GlobalVariables.Resolution.X;
+            _graphics.PreferredBackBufferHeight = GlobalVariables.Resolution.Y;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -32,6 +32,7 @@ namespace Neuro_Shoot_the_Drones
             Resources.PlayerTextureAtlas = Content.Load<Texture2D>("PlayerAtlas");
             Resources.GameFrameUI = Content.Load<Texture2D>("GameFrame");
             Resources.BulletTextureAtlas = Content.Load<Texture2D>("Bullets");
+            Resources.Drone = Content.Load<Texture2D>("drone");
         }
 
         protected override void Update(GameTime gameTime)

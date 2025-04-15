@@ -27,6 +27,8 @@ namespace Neuro_Shoot_the_Drones
             new(0, -1),
             new(0, 1)
         };
+        private static Vector2 StartPosition = new(GlobalVariables.VisibleGameplayArea.Left + GlobalVariables.VisibleGameplayArea.Width / 2,
+                                                   GlobalVariables.VisibleGameplayArea.Bottom - GlobalVariables.VisibleGameplayArea.Height / 5);
         public Vector2 Direction { get; private set; } = new();
 
         public Vector2 Position { get; private set; } = new();
@@ -40,8 +42,9 @@ namespace Neuro_Shoot_the_Drones
 
         public void Initialize()
         {
+            Position = StartPosition;
             TextureAtlas = Resources.PlayerTextureAtlas;
-            RelativeDestinationCenter = TextureSourceRect.GetRelativeCenter(scale: TextureScale);
+            RelativeDestinationCenter = TextureSourceRect.GetRelativeCenter();
         }
 
         public void Update(GameTime gameTime)
@@ -56,14 +59,15 @@ namespace Neuro_Shoot_the_Drones
         public void Draw(GameTime gameTime, SpriteBatch sb)
         {
             sb.Draw(texture: TextureAtlas,
-                    position: Position - RelativeDestinationCenter,
+                    position: Position,
                     sourceRectangle: TextureSourceRect,
                     color: Color.White,
                     rotation: 0f,
-                    origin: Vector2.Zero,
+                    origin: RelativeDestinationCenter,
                     effects: SpriteEffects.None,
                     scale: TextureScale,
                     layerDepth: 0f);
+            sb.Draw(TextureAtlas, new Rectangle(Position.ToPoint(), new(15,15)), Color.Red);
         }
 
         //So we can record player's actions to a replay

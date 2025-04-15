@@ -23,7 +23,7 @@ namespace Neuro_Shoot_the_Drones
         Vector2 TextureScale = Vector2.One;
 
         public delegate void DestroyHandler();
-        public event DestroyHandler Destroy;
+        public event DestroyHandler OnDestroy;
 
         public PlayerBullet(Texture2D texture, Rectangle sourceRect, int hitCircleSize, Vector2 position, int damage, float speed, float acceleration)
         {
@@ -34,18 +34,18 @@ namespace Neuro_Shoot_the_Drones
             Damage = damage;
             Speed = speed;
             Acceleration = acceleration;
-            Destroy += () => IsActive = false;
+            OnDestroy += () => IsActive = false;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch sb)
         {
             sb.Draw(
                     texture: Texture,
-                    position: Position - RelativeDestinationCenter,
+                    position: Position,
                     sourceRectangle: TextureSourceRect,
                     color: Color.White,
                     rotation: 0f,
-                    origin: Vector2.Zero,
+                    origin: RelativeDestinationCenter,
                     scale: TextureScale,
                     effects: SpriteEffects.None,
                     layerDepth: 0f);
@@ -53,14 +53,14 @@ namespace Neuro_Shoot_the_Drones
 
         public void Initialize()
         {
-            RelativeDestinationCenter = TextureSourceRect.GetRelativeCenter(TextureScale);
+            RelativeDestinationCenter = TextureSourceRect.GetRelativeCenter();
             IsActive = true;
         }
 
         public void Update(GameTime gameTime)
         {
             if (Position.Y < GlobalVariables.VisibleGameplayArea.Top)
-                Destroy();
+                OnDestroy();
             Position.Y -= Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 

@@ -18,7 +18,7 @@ namespace Neuro_Shoot_the_Drones
                 hitCircleSize: 10,
                 position: position,
                 damage: 1,
-                speed: 750,
+                speed: 1200,
                 acceleration: 0);
         }
     }

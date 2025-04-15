@@ -15,5 +15,32 @@ namespace Neuro_Shoot_the_Drones
             var y = Math.Clamp(v.Y, rect.Top, rect.Bottom);
             return new Vector2(x, y);
         }
+
+        public static Vector2 Rotated(this Vector2 vector, float rotation)
+        {
+            float sin = MathF.Sin(rotation);
+            float cos = MathF.Cos(rotation);
+
+            float newX = (vector.X * cos) - (vector.Y * sin);
+            float newY = (vector.X * sin) + (vector.Y * cos);
+
+            return new Vector2(newX, newY);
+        }
+
+        public static float LookAt(this Vector2 position,  Vector2 target)
+        {
+            Vector2 direction = target - position;
+            float angle = MathF.Atan2(direction.Y, direction.X);
+            return angle;
+        }
+
+        public static Vector2 WithY(this Vector2 v, float y)
+        {
+            return new Vector2(v.X, y);
+        }
+        public static Vector2 WithX(this Vector2 v, float x)
+        {
+            return new Vector2(x, v.Y);
+        }
     }
 }

@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
-    internal class Tween<T> where T : System.Numerics.IMultiplyOperators<T, double, T>, System.Numerics.IAdditionOperators<T, T, T>
+    //TODO: Rewrite this shit
+    internal class Tween<T> where T : System.Numerics.IMultiplyOperators<T, double, T>, System.Numerics.IAdditionOperators<T, T, T>, System.Numerics.ISubtractionOperators<T, T, T>
     { 
         public bool IsFinished = false;
         public bool IsStarted = false;
@@ -38,7 +39,15 @@ namespace Neuro_Shoot_the_Drones
         public void Update(GameTime gameTime)
         {
             if(IsFinished || IsPaused || !IsStarted) return;
-            Value = StartValue + EndValue * Easings.Interpolate((float)(Timer / EndTime), EasingType);
+            Timer += gameTime.ElapsedGameTime.TotalSeconds;
+            if(Timer >= EndTime)
+            {
+                IsFinished = true;
+                OnFinish();
+                Timer = EndTime;
+            }
+            Value = StartValue + (EndValue - StartValue) * Easings.Interpolate((float)(Timer / EndTime), EasingType);
+            OnUpdate();
         }
         public void Reset()
         {
@@ -50,13 +59,25 @@ namespace Neuro_Shoot_the_Drones
         public void Start()
         {
             IsStarted = true;
-            OnStart();
+            OnStart?.Invoke();
         }
         
         public void Interrupt()
         {
             IsFinished = true;
             OnFinish();
+        }
+        
+        public void Pause()
+        {
+            if (!IsPaused)
+                IsPaused = true;
+        }
+        
+        public void Resume()
+        {
+            if (IsPaused)
+                IsPaused = false;
         }
 
         public void Skip()
