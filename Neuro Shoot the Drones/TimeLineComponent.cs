@@ -14,7 +14,8 @@ namespace Neuro_Shoot_the_Drones
         Finished
     }
 
-    internal class TimeLine
+    //BUG: Cannot add elements with the same Time key right now. 
+    internal class TimeLineComponent
     {
         public double Time { get; private set;  } = 0 ;
         Queue<TimeLineElement> timeLine = new();

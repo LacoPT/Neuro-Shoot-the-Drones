@@ -8,28 +8,17 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
-    internal class EnemyBullet : IGameObject
+    internal class EnemyBullet : GameEntity
     {
-        bool IsActive;
-        Texture2D Texture;
-        Rectangle TextureSourceRect;
-        Vector2 TextureScale;
-        public readonly int HitCircleSize = 10;
-
-        
-
-        public Vector2 Position { get; private set; }
         public float BasicSpeed { get; private set; }
         public Vector2 Velocity { get; private set; }
-        public Vector2 Acceleration { get; private set; } = Vector2.Zero;
-        public float Rotation; 
+        public Vector2 Acceleration { get; private set; }
         public float RotationSpeed { get; private set; } = 0;
         public float RotationAcceleration { get; private set; } = 0;
 
         public delegate void OnDestroyHandler();
         public event OnDestroyHandler OnDestroy;
 
-        //1, 49, 17, 65
         public EnemyBullet(Rectangle textureSourceRect,
             Vector2 textureScale,
             Vector2 position,
@@ -39,8 +28,8 @@ namespace Neuro_Shoot_the_Drones
             float rotationSpeed = 0,
             float rotationAcceleration = 0)
         {
-            TextureSourceRect = textureSourceRect;
-            TextureScale = textureScale;
+            //TODO: Solve texture problem
+            DrawableComponent = new(Resources.BulletTextureAtlas, textureSourceRect, textureScale, textureSourceRect.GetRelativeCenter());
             HitCircleSize = hitCircleSize;
             Position = position;
             BasicSpeed = speed;
@@ -50,6 +39,7 @@ namespace Neuro_Shoot_the_Drones
             RotationSpeed = rotationSpeed;
             RotationAcceleration = rotationAcceleration;
         }
+
         public EnemyBullet(Rectangle textureSourceRect,
             Vector2 textureScale,
             Vector2 position,
@@ -59,38 +49,22 @@ namespace Neuro_Shoot_the_Drones
             int hitCircleSize = 10,
             float rotation = 0,
             float rotationSpeed = 0,
-            float rotationAcceleration = 0)
+            float rotationAcceleration = 0) : this(textureSourceRect, textureScale, position, speed,
+                                                    hitCircleSize, rotation, rotationSpeed, rotationAcceleration)
         {
-            TextureSourceRect = textureSourceRect;
-            TextureScale = textureScale;
-            HitCircleSize = hitCircleSize;
-            HitCircleSize = hitCircleSize;
-            Position = position;
-            BasicSpeed = speed;
+            Velocity = velocity;
             Acceleration = acceleration;
-            Rotation = rotation;
-            RotationSpeed = rotationSpeed;
-            RotationAcceleration = rotationAcceleration;
         }
-        public void Draw(GameTime gameTime, SpriteBatch sb)
+        public override void Draw(GameTime gameTime, SpriteBatch sb)
         {
-            sb.Draw(texture: Texture,
-                position: Position,
-                sourceRectangle: TextureSourceRect,
-                color: Color.White,
-                rotation: Rotation,
-                origin: TextureSourceRect.GetRelativeCenter(),
-                scale: TextureScale,
-                effects: SpriteEffects.None,
-                layerDepth: 0f);
+            base.Draw(gameTime, sb);
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
-            Texture = Resources.BulletTextureAtlas;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             Velocity = new Vector2(0, BasicSpeed).Rotated(Rotation) * (float)gameTime.ElapsedGameTime.TotalSeconds;
             Position += Velocity;

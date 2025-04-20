@@ -8,13 +8,9 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
-    internal class PlayerBullet : IGameObject
+    internal class PlayerBullet : GameEntity
     {
         public bool IsActive { get; private set; } = false;
-        public Texture2D Texture;
-        public Rectangle TextureSourceRect;
-        public int HitCircleSize;
-        public Vector2 Position;
         public int Damage;
         public float Speed;
         public float Acceleration;
@@ -27,8 +23,7 @@ namespace Neuro_Shoot_the_Drones
 
         public PlayerBullet(Texture2D texture, Rectangle sourceRect, int hitCircleSize, Vector2 position, int damage, float speed, float acceleration)
         {
-            Texture = texture;
-            TextureSourceRect = sourceRect;
+            DrawableComponent = new(texture, sourceRect, Vector2.One, sourceRect.GetRelativeCenter());
             HitCircleSize = hitCircleSize;
             Position = position;
             Damage = damage;
@@ -37,36 +32,23 @@ namespace Neuro_Shoot_the_Drones
             OnDestroy += () => IsActive = false;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch sb)
+        public override void Draw(GameTime gameTime, SpriteBatch sb)
         {
-            sb.Draw(
-                    texture: Texture,
-                    position: Position,
-                    sourceRectangle: TextureSourceRect,
-                    color: Color.White,
-                    rotation: 0f,
-                    origin: RelativeDestinationCenter,
-                    scale: TextureScale,
-                    effects: SpriteEffects.None,
-                    layerDepth: 0f);
+
+            base.Draw(gameTime, sb);
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
-            RelativeDestinationCenter = TextureSourceRect.GetRelativeCenter();
             IsActive = true;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (Position.Y < GlobalVariables.VisibleGameplayArea.Top)
                 OnDestroy();
             Position.Y -= Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        }
-
-        public void UpdatePosition(Vector2 newPos)
-        {
-            Position = newPos;
+            Speed += Acceleration;
         }
     }
 }

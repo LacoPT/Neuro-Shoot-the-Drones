@@ -4,15 +4,13 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
-    internal class Player : IGameObject
+    internal class Player : GameEntity
     {
-        private const int HitCircleSize = 5;
         //Pixels per seconds
         private const int Speed = 400;
         private const float FocusedSlowDownCoofficient = 0.4f;
@@ -20,6 +18,7 @@ namespace Neuro_Shoot_the_Drones
         private const double Firerate = 12;
         private double TimeToShoot { get => 1 / Firerate; }
         private double ShootTimer = 0;
+
         private readonly static Vector2[] Directions = new Vector2[]
         {
             new(-1, 0),
@@ -30,24 +29,22 @@ namespace Neuro_Shoot_the_Drones
         private static Vector2 StartPosition = new(GlobalVariables.VisibleGameplayArea.Left + GlobalVariables.VisibleGameplayArea.Width / 2,
                                                    GlobalVariables.VisibleGameplayArea.Bottom - GlobalVariables.VisibleGameplayArea.Height / 5);
         public Vector2 Direction { get; private set; } = new();
-
-        public Vector2 Position { get; private set; } = new();
         public bool Focused { get; private set; }
 
-        public Texture2D TextureAtlas { get; private set; }
-        private Rectangle TextureSourceRect = new(Point.Zero, new(200, 300));
-        private Vector2 TextureScale = new Vector2(75f / 200, 1f / 3);
-        private Vector2 RelativeDestinationCenter = Vector2.Zero;
-        private static Rectangle PlayerAllowedArea = GlobalVariables.VisibleGameplayArea.Grow(-HitCircleSize);
+        private static Rectangle PlayerAllowedArea;
 
-        public void Initialize()
+        public override void Initialize()
         {
+            PlayerAllowedArea = GlobalVariables.VisibleGameplayArea.Grow(-HitCircleSize);
+            var textureSourceRect = new Rectangle(Point.Zero, new(200, 300));
             Position = StartPosition;
-            TextureAtlas = Resources.PlayerTextureAtlas;
-            RelativeDestinationCenter = TextureSourceRect.GetRelativeCenter();
+            DrawableComponent = new(Resources.PlayerTextureAtlas,
+                                    textureSourceRect, 
+                                    new Vector2(75f / 200, 1f / 3),
+                                    textureSourceRect.GetRelativeCenter());
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             Direction.Normalize();
             var currentSpeed = Speed * (1 - (Convert.ToInt32(Focused) * FocusedSlowDownCoofficient));
@@ -56,18 +53,9 @@ namespace Neuro_Shoot_the_Drones
             ResetState();
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch sb)
+        public override void Draw(GameTime gameTime, SpriteBatch sb)
         {
-            sb.Draw(texture: TextureAtlas,
-                    position: Position,
-                    sourceRectangle: TextureSourceRect,
-                    color: Color.White,
-                    rotation: 0f,
-                    origin: RelativeDestinationCenter,
-                    effects: SpriteEffects.None,
-                    scale: TextureScale,
-                    layerDepth: 0f);
-            sb.Draw(TextureAtlas, new Rectangle(Position.ToPoint(), new(15,15)), Color.Red);
+            base.Draw(gameTime, sb);
         }
 
         //So we can record player's actions to a replay
@@ -82,20 +70,15 @@ namespace Neuro_Shoot_the_Drones
             {
                 ShootTimer = 0;
                 Vector2 indent = new(6, 0);
-                //BulletHell.CreatePlayerBullet(PlayerBulletFactory.CreateStandartPlayerBullet(Position + indent));
-                //BulletHell.CreatePlayerBullet(PlayerBulletFactory.CreateStandartPlayerBullet(Position - indent));
                 BulletHell.CreatePlayerBullet(Position + indent);
                 BulletHell.CreatePlayerBullet(Position - indent);
             }    
             ShootTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }
-
         public void Focus()
         {
             if(!Focused)
-            {
                 EnterFocus();
-            }
         }
 
         private void EnterFocus()

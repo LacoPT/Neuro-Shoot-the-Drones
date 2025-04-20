@@ -8,16 +8,9 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
-    internal class Enemy : IGameObject
+    internal class Enemy : GameEntity
     {
         public int Health { get; private set; }
-        private int HitCircleSize = 15;
-        public Vector2 Position { get; private set; }
-        private Texture2D Texture;
-        private Rectangle TextureSourceRect;
-        private Vector2 TextureScale;
-        private List<Tween<double>> tweens = new();
-
 
         public delegate void OnHitEventHandler();
         public delegate void OnDeathEventHandler();
@@ -25,38 +18,28 @@ namespace Neuro_Shoot_the_Drones
         public event OnUpdateEventHandler OnUpdate;
         public event OnHitEventHandler OnHit;
         public event OnDeathEventHandler OnDeath;
-        public TimeLine TimeLine { get; private set; } = new TimeLine();
+        public TimeLineComponent TimeLine { get; private set; } = new TimeLineComponent();
 
         public Enemy(int health, int hitCircleSize, Vector2 initialPosition, Texture2D texture, Rectangle textureSourceRect, Vector2 textureScale)
         {
             Health = health;
             HitCircleSize = hitCircleSize;
             Position = initialPosition;
-            Texture = texture;
-            TextureSourceRect = textureSourceRect;
-            TextureScale = textureScale;
+            DrawableComponent = new(texture, textureSourceRect, textureScale, textureSourceRect.GetRelativeCenter());
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch sb)
+        public override void Draw(GameTime gameTime, SpriteBatch sb)
         {
-            sb.Draw(
-                    texture: Texture,
-                    position: Position,
-                    sourceRectangle: TextureSourceRect,
-                    color: Color.White,
-                    rotation: 0f,
-                    origin: TextureSourceRect.GetRelativeCenter(),
-                    scale: TextureScale,
-                    effects: SpriteEffects.None,
-                    layerDepth: 0f);
+            base.Draw(gameTime, sb);
         }
 
-        public void Initialize()
+
+        public override void Initialize()
         {
             TimeLine.Start();
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             OnUpdate?.Invoke(gameTime);
             TimeLine.Update(gameTime);
@@ -67,11 +50,9 @@ namespace Neuro_Shoot_the_Drones
             Position = newPosition;
         }
 
-        public void AddTween(Tween<double> tween)
+        public void AddTween(Tween tween)
         {
-            tweens.Add(tween);
             OnUpdate += (gameTime) => tween.Update(gameTime);
-            tween.OnFinish += () => tweens.Remove(tween);
         }
     }
 }

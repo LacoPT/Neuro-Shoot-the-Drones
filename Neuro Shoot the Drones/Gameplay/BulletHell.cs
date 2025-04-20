@@ -71,9 +71,8 @@ namespace Neuro_Shoot_the_Drones
         {
             var b = PlayerBulletFactory.CreateStandartPlayerBullet(position);
             PlayerBullets.Add(b);
-            b.Initialize();
-            b.UpdatePosition(position);
             b.OnDestroy += () => PlayerBulletsToRemove.Add(b);
+            b.Initialize();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
     internal class SimpleCircularPattern : IBulletHellPattern
     {
         public readonly int Count = 5;
-        public readonly Vector2 Position;
+        public  Vector2 Position;
         public readonly float InitialRotation;
 
         public SimpleCircularPattern(int count, Vector2 position, float initialRotation = 0)
@@ -31,6 +31,11 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
                 BulletHell.CreateEnemyBullet(b);
                 rotation += step;
             }
+        }
+
+        public void UpdatePosition(Vector2 newPosition)
+        {
+            Position = newPosition;
         }
     }
 }

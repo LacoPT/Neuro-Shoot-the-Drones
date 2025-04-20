@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Neuro_Shoot_the_Drones.Gameplay.Enemies;
+using Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace Neuro_Shoot_the_Drones
     {
         public Player player;
         public List<Enemy> enemies = new();
+
+        //TODO: Extract into Level System;
+        TimeLineComponent TimeLine = new();
 
         public void Draw(GameTime gameTime, SpriteBatch sb)
         {
@@ -31,15 +35,42 @@ namespace Neuro_Shoot_the_Drones
             player = new Player();
             player.Initialize();
 
-            var enemy = EnemyFactory.CreateSimpleDrone();
-            enemies.Add(enemy);
-            enemy.Initialize();
+            FillTimeLine();
+            TimeLine.Start();
+        }
 
+        private void FillTimeLine()
+        {
+            TimeLine.AddElement(0, () =>
+            {
+                var enemy = EnemyID.Create(0, new Vector2(400, -300));
+                enemies.Add(enemy);
+                enemy.Initialize();
+            });
+            TimeLine.AddElement(0.5, () =>
+            {
+                var enemy = EnemyID.Create(0, new Vector2(550, -200));
+                enemies.Add(enemy);
+                enemy.Initialize();
+            });
+            TimeLine.AddElement(1, () =>
+            {
+                var enemy = EnemyID.Create(0, new Vector2(700, -150));
+                enemies.Add(enemy);
+                enemy.Initialize();
+            });
+            TimeLine.AddElement(1.5, () =>
+            {
+                var enemy = EnemyID.Create(0, new Vector2(850, -250));
+                enemies.Add(enemy);
+                enemy.Initialize();
+            });
         }
 
         public void Update(GameTime gameTime)
         {
             PlayerControl(gameTime);
+            TimeLine.Update(gameTime);
             player.Update(gameTime);
             BulletHell.PlayerPosition = player.Position;
             BulletHell.Update(gameTime);

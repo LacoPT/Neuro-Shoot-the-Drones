@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 namespace Neuro_Shoot_the_Drones
 {
     //TODO: Rewrite this shit
-    internal class Tween<T> where T : System.Numerics.IMultiplyOperators<T, double, T>, System.Numerics.IAdditionOperators<T, T, T>, System.Numerics.ISubtractionOperators<T, T, T>
-    { 
+    internal class Tween    { 
         public bool IsFinished = false;
         public bool IsStarted = false;
         public bool IsPaused = false;
@@ -22,13 +21,13 @@ namespace Neuro_Shoot_the_Drones
         public event UpdateHandler OnUpdate;
 
         public EasingType EasingType;
-        T StartValue { get; set; }
-        T EndValue { get; set; }
-        public T Value { get; private set; }
-        public double Timer = 0;
-        double EndTime = 0;
+        float StartValue { get; set; }
+        float EndValue { get; set; }
+        public float Value { get; private set; }
+        public double Timer { get; private set; } = 0;
+        readonly double EndTime = 0;
 
-        public Tween(T startValue, T endValue, double endTime = 1, EasingType easingType = EasingType.Linear)
+        public Tween(float startValue, float endValue, double endTime = 1, EasingType easingType = EasingType.Linear)
         {
             StartValue = startValue;
             EndValue = endValue;
@@ -43,7 +42,7 @@ namespace Neuro_Shoot_the_Drones
             if(Timer >= EndTime)
             {
                 IsFinished = true;
-                OnFinish();
+                OnFinish?.Invoke();
                 Timer = EndTime;
             }
             Value = StartValue + (EndValue - StartValue) * Easings.Interpolate((float)(Timer / EndTime), EasingType);
@@ -65,7 +64,7 @@ namespace Neuro_Shoot_the_Drones
         public void Interrupt()
         {
             IsFinished = true;
-            OnFinish();
+            OnFinish?.Invoke();
         }
         
         public void Pause()
@@ -85,7 +84,7 @@ namespace Neuro_Shoot_the_Drones
             Value = EndValue;
             OnUpdate();
             IsFinished = true;
-            OnFinish();
+            OnFinish?.Invoke();
         }
     }
 }

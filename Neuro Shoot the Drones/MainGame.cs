@@ -1,9 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories;
 
 namespace Neuro_Shoot_the_Drones
 {
+    //TODO: Finish architecture migration to ECS
+    //TODO: Add collsions check
+    //TODO: Add Player stats - Health, Bombs, Score, Graze, Power
+    //TODO: Add levels System
+    //TODO: Add bosses to architecture
     public class MainGame : Game
     {
         private GraphicsDeviceManager _graphics;
@@ -23,6 +29,7 @@ namespace Neuro_Shoot_the_Drones
         {
             //!!! DO NOT DO ANYTHING BEFORE base.Initialize() !!!
             base.Initialize();
+            EnemyID.Initialize();
             currentScene.Initialize();
         }
 
