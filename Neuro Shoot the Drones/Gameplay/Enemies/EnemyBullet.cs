@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Neuro_Shoot_the_Drones.Gameplay.Collisions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,8 @@ namespace Neuro_Shoot_the_Drones
             Rotation = rotation;
             RotationSpeed = rotationSpeed;
             RotationAcceleration = rotationAcceleration;
+            //TODO: Right now EnemyBullets does not collide with anything, because CollisionLayers is set to None
+            CollisionComponent = new(hitCircleSize, CollisionLayers.None, CollisionLayers.None, new CollisionData(0));
         }
 
         public EnemyBullet(Rectangle textureSourceRect,
@@ -62,12 +65,15 @@ namespace Neuro_Shoot_the_Drones
 
         public override void Initialize()
         {
+            //TODO: Add CollisionComponent behaviour here
         }
 
         public override void Update(GameTime gameTime)
         {
             Velocity = new Vector2(0, BasicSpeed).Rotated(Rotation) * (float)gameTime.ElapsedGameTime.TotalSeconds;
             Position += Velocity;
+
+            base.Update(gameTime);
         }
     }
 }

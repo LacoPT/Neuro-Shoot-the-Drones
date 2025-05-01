@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
+    //Note: This might be callet BulletSystem or BulletHellSystem also consider using EventBus, to get rid of staticity
+    //BUG: This class is SO SHIT, i need to rewrite EVERYTHING
     internal static class BulletHell
     {
         static public Vector2 PlayerPosition = Vector2.Zero;
@@ -19,6 +21,14 @@ namespace Neuro_Shoot_the_Drones
         static List<PlayerBullet> PlayerBulletsToRemove = new();
         static List<EnemyBullet> EnemyBulletsToRemove = new();
         static List<EnemyBullet> EnemyBullets = new();
+
+        //TODO: Rewrite this shit, because scene should work as event bus, this class shouldn't be static in the first place
+        //rn it is what it is 
+        public delegate void BulletAddedEventHandler(GameEntity bullet);
+        public delegate void BulletRemovedEventHandler(GameEntity bullet);
+
+        public static event BulletAddedEventHandler OnBulletAdded;
+        public static event BulletRemovedEventHandler OnBulletRemoved;
 
         public static void Draw(GameTime gameTime, SpriteBatch sb)
         {
@@ -46,6 +56,7 @@ namespace Neuro_Shoot_the_Drones
             foreach(PlayerBullet b in PlayerBulletsToRemove)
             {
                 PlayerBullets.Remove(b);
+                OnBulletRemoved(b);
             }
             PlayerBulletsToRemove.Clear();
             foreach(var b in PlayerBullets)
@@ -64,7 +75,9 @@ namespace Neuro_Shoot_the_Drones
             var b = bullet;
             EnemyBullets.Add(b);
             b.Initialize();
+            //NOTE: We are not removing EnemyBullets any way right now
             b.OnDestroy += () => EnemyBulletsToRemove.Add(b);
+            OnBulletAdded(bullet);
         }
         
         public static void CreatePlayerBullet(Vector2 position)
@@ -72,7 +85,12 @@ namespace Neuro_Shoot_the_Drones
             var b = PlayerBulletFactory.CreateStandartPlayerBullet(position);
             PlayerBullets.Add(b);
             b.OnDestroy += () => PlayerBulletsToRemove.Add(b);
+
+            //NOTE: Temporaly decision since there will be more bullet types later
+            b.OnHit += () => b.Destroy();
             b.Initialize();
+            OnBulletAdded(b);
         }
+
     }
 }

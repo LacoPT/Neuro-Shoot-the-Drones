@@ -20,7 +20,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories
 
         public static Enemy Create(int id, Vector2 initialPosition)
         {
-            return factories.ElementAt(id).CreateEnemy(initialPosition);
+            return factories.ElementAt(id).Create(initialPosition);
         }
     }
 }

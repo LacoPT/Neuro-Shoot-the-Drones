@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
+    //TODO: Instead of cheking for null, make an initialization method
     internal static class Resources
     {
         private static Texture2D playerTextureAtlas;

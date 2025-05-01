@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Neuro_Shoot_the_Drones.Gameplay.Collisions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
+    //TODO: Extract some methods to MoveComponent or smth
+    //BUG: There might be a bug, where HitCircleSize is not set anywhere in the code
     internal class Player : GameEntity
     {
         //Pixels per seconds
@@ -33,6 +36,11 @@ namespace Neuro_Shoot_the_Drones
 
         private static Rectangle PlayerAllowedArea;
 
+        public Player()
+        {
+            CollisionComponent = new(HitCircleSize, CollisionLayers.Player, CollisionLayers.EnemyBullet, new CollisionData(0));
+        }
+
         public override void Initialize()
         {
             PlayerAllowedArea = GlobalVariables.VisibleGameplayArea.Grow(-HitCircleSize);
@@ -51,6 +59,8 @@ namespace Neuro_Shoot_the_Drones
             Position += Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * currentSpeed;
             Position = Position.RectClamp(PlayerAllowedArea);
             ResetState();
+
+            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch sb)
@@ -58,7 +68,7 @@ namespace Neuro_Shoot_the_Drones
             base.Draw(gameTime, sb);
         }
 
-        //So we can record player's actions to a replay
+        //NOTE: So we can record player's actions to a replay
         public void ControlLeft() => Direction += Directions[0];
         public void ControlRight() => Direction += Directions[1];
         public void ControlUp() => Direction += Directions[2];
@@ -77,23 +87,23 @@ namespace Neuro_Shoot_the_Drones
         }
         public void Focus()
         {
-            if(!Focused)
-                EnterFocus();
-        }
-
-        private void EnterFocus()
-        {
             Focused = true;
         }
 
-        public void ExitFocus()
+        //TODO: Make maybe some events for this, to animate support fires
+        private void EnterFocus()
         {
-            Focused = false;
         }
 
+        private void ExitFocus()
+        {
+        }
+
+        //TODO: Rename
         private void ResetState()
         {
             Direction = Vector2.Zero;
+            Focused = false;
         }
     }
 }

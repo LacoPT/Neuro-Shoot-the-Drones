@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
+    //TODO: Refactor this, make clear that this is a class for storing Screen Resolution parameters
     internal static class GlobalVariables
     {
         public static Point Resolution = new(1920, 1080);

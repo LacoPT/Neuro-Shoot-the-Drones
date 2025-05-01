@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
+    //TODO: Consider rewriting into abstract class
     internal interface IGameScene
     {
         public void Initialize();

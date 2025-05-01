@@ -10,6 +10,8 @@ namespace Neuro_Shoot_the_Drones
     //TODO: Add Player stats - Health, Bombs, Score, Graze, Power
     //TODO: Add levels System
     //TODO: Add bosses to architecture
+    //TODO: Consider making ID superclass for EnemyID, PatternID or LevelID
+    //NOTE: It was to late to rewrite all of the code when i found out the existence of ComponentModel namespace
     public class MainGame : Game
     {
         private GraphicsDeviceManager _graphics;
