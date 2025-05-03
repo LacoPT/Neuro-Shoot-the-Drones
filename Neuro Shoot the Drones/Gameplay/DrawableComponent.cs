@@ -15,6 +15,8 @@ namespace Neuro_Shoot_the_Drones
         public Vector2 TextureScale { get; private set; }
         public Vector2 Origin { get; private set; }
 
+        public SpriteEffects Effect = SpriteEffects.None; 
+
         public DrawableComponent(Texture2D textureAtlas, Rectangle textureSourceRectangle, Vector2 textureScale, Vector2 origin)
         {
             TextureAtlas = textureAtlas;
@@ -31,7 +33,7 @@ namespace Neuro_Shoot_the_Drones
                     color: Color.White,
                     rotation: rotation,
                     origin: Origin,
-                    effects: SpriteEffects.None,
+                    effects: Effect,
                     scale: TextureScale,
                     layerDepth: 0f);
         }

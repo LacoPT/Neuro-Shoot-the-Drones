@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace Neuro_Shoot_the_Drones.Gameplay.Collisions
 {
     //NOTE: To use, you need to update its position from class that has this Component
+    //TODO: Collision component shoud have it's own OnDestroy event that CollisionSystem handles
     internal class CollisionComponent
     {
         public int HitCircleSize { get; private set; }

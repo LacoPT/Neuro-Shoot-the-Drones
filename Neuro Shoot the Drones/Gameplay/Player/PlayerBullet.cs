@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Neuro_Shoot_the_Drones.Gameplay;
 using Neuro_Shoot_the_Drones.Gameplay.Collisions;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones
 {
-    internal class PlayerBullet : GameEntity
+/*    internal class PlayerBullet : GameEntity
     {
         public bool IsActive { get; private set; } = false;
         public int Damage;
@@ -36,6 +37,7 @@ namespace Neuro_Shoot_the_Drones
             Acceleration = acceleration;
             OnDestroy += () => IsActive = false;
             CollisionComponent = new(hitCircleSize, CollisionLayers.Enemy, CollisionLayers.PlayerBullet, new CollisionData(damage));
+            CollisionComponent.OnCollisionRegistered += (collisionData) => Hit();
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch sb)
@@ -45,7 +47,6 @@ namespace Neuro_Shoot_the_Drones
 
         public override void Initialize()
         {
-            CollisionComponent.OnCollisionRegistered += (collisionData) => Hit();
             IsActive = true;
         }
 
@@ -68,5 +69,50 @@ namespace Neuro_Shoot_the_Drones
         {
             OnDestroy?.Invoke();
         }
+    }
+*/
+    internal class PlayerBullet: BaseBullet
+    {
+        public readonly int Damage;
+        int HitLimit = 1;
+        public PlayerBullet
+            (
+                Texture2D texture,
+                Rectangle textureSourceRect,
+                int hitCircleSize,
+                Vector2 textureScale,
+                Vector2 position,
+                int damage,
+                float baseSpeed,
+                float acceleration,
+                int hitLimit
+            ) : base(texture, textureSourceRect, textureScale, position, baseSpeed, acceleration)
+        {
+            Damage = damage;
+            HitLimit = hitLimit;
+            CollisionComponent = new(hitCircleSize, CollisionLayers.Enemy, CollisionLayers.PlayerBullet, new CollisionData(damage));
+            CollisionComponent.OnCollisionRegistered += (collisionData) => Hit();
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch sb)
+        {
+            base.Draw(gameTime, sb);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (Position.Y < GlobalVariables.VisibleGameplayArea.Y)
+                Destroy();
+
+            base.Update(gameTime);
+        }
+
+        void Hit()
+        {
+            HitLimit--;
+            if (HitLimit <= 0)
+                Destroy();
+        }
+        
     }
 }

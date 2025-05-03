@@ -22,8 +22,9 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
             enemy.TimeLine.AddElement(startOn, () =>
             {
                 var tween = new Tween(enemy.Position.X, to, duration, easing);
-                var oldPosition = enemy.Position;
-                tween.OnUpdate += () => enemy.UpdatePosition(oldPosition.WithX(tween.Value));
+                //var oldPosition = enemy.Position;
+                //tween.OnUpdate += () => enemy.UpdatePosition(oldPosition.WithX(tween.Value));
+                tween.OnUpdate += () => enemy.Position.X = (tween.Value);
                 enemy.AddTween(tween);
                 tween.Start();
             });
@@ -67,8 +68,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
             enemy.TimeLine.AddElement(startOn, () =>
             {
                 pattern.UpdatePosition(enemy.Position);
-                //TODO: Generate() should take Position as parameter
-                pattern.Generate();
+                enemy.GeneratePattern(pattern.Generate());
             });
         }
 

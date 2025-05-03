@@ -53,6 +53,18 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Levels
                 OnEnemySpawned(enemy);
             });
 
+            TimeLine.AddElement(8, () =>
+            {
+                var enemy = EnemyID.Create(1, new Vector2(300, 500));
+                OnEnemySpawned(enemy);
+            });
+
+            TimeLine.AddElement(9, () =>
+            {
+                var enemy = EnemyID.Create(2, new Vector2(GlobalVariables.VisibleGameplayArea.Right + 150, 400));
+                OnEnemySpawned(enemy);
+            });
+
             TimeLine.Start();
         }
     }

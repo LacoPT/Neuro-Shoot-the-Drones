@@ -14,11 +14,13 @@ namespace Neuro_Shoot_the_Drones
         {
             return new PlayerBullet(
                 texture: Resources.BulletTextureAtlas,
-                sourceRect: new(2, 129, 14, 16),
+                textureSourceRect: new(2, 129, 14, 16),
+                textureScale: Vector2.One,
                 hitCircleSize: 10,
                 position: position,
                 damage: 1,
-                speed: 1200,
+                hitLimit: 1,
+                baseSpeed: 1200,
                 acceleration: 0);
         }
     }

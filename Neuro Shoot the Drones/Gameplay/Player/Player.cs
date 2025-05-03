@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neuro_Shoot_the_Drones
+namespace Neuro_Shoot_the_Drones.Gameplay
 {
     //TODO: Extract some methods to MoveComponent or smth
     //BUG: There might be a bug, where HitCircleSize is not set anywhere in the code
@@ -21,6 +21,11 @@ namespace Neuro_Shoot_the_Drones
         private const double Firerate = 12;
         private double TimeToShoot { get => 1 / Firerate; }
         private double ShootTimer = 0;
+
+        //TODO: Think of a way to pass differen types of bullets to events
+        //OR MAYBE this could be the companion's work
+        public delegate void ShootEventHandler(Vector2 Position);
+        public event ShootEventHandler OnShoot;
 
         private readonly static Vector2[] Directions = new Vector2[]
         {
@@ -80,8 +85,9 @@ namespace Neuro_Shoot_the_Drones
             {
                 ShootTimer = 0;
                 Vector2 indent = new(6, 0);
-                BulletHell.CreatePlayerBullet(Position + indent);
-                BulletHell.CreatePlayerBullet(Position - indent);
+
+                OnShoot?.Invoke(Position + indent);
+                OnShoot?.Invoke(Position - indent);
             }    
             ShootTimer += gameTime.ElapsedGameTime.TotalSeconds;
         }

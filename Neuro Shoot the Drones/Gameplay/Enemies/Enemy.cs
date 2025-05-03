@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Neuro_Shoot_the_Drones.Gameplay;
 using Neuro_Shoot_the_Drones.Gameplay.Collisions;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,11 @@ namespace Neuro_Shoot_the_Drones
         public delegate void OnUpdateEventHandler(GameTime gameTime);
         public event OnUpdateEventHandler OnUpdate;
         public event OnHitEventHandler OnHit;
+        public delegate void PatternGeneratedEventHandler(List<EnemyBullet> bullets);
+        public event PatternGeneratedEventHandler OnPatternGenerated;
+        //NOTE: There is differences between Death and Destroy
+        //Destroy may be called when Enemy exits scene naturally
+        //Death however is called when enemy's health is below zero, based on that we might add score, spawn pickups or play sounds
         public event OnDeathEventHandler OnDeath;
         public TimeLineComponent TimeLine { get; private set; } = new TimeLineComponent();
 
@@ -28,7 +34,12 @@ namespace Neuro_Shoot_the_Drones
             HitCircleSize = hitCircleSize;
             Position = initialPosition;
             DrawableComponent = new(texture, textureSourceRect, textureScale, textureSourceRect.GetRelativeCenter());
-            CollisionComponent = new( HitCircleSize, CollisionLayers.PlayerBullet, CollisionLayers.Enemy, new(0) );
+            CollisionComponent = new( HitCircleSize, CollisionLayers.PlayerBullet | CollisionLayers.Player, CollisionLayers.Enemy, new(0) );
+            CollisionComponent.OnCollisionRegistered += (collisionData) =>
+            {
+                Hit(collisionData.Damage);
+            };
+            OnDeath += Destroy;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch sb)
@@ -39,13 +50,8 @@ namespace Neuro_Shoot_the_Drones
 
         public override void Initialize()
         {
-            CollisionComponent.OnCollisionRegistered += (collisionData) =>
-            {
-                OnHit?.Invoke();
-                Hit(collisionData.Damage);
-            };
-
             TimeLine.Start();
+            base.Initialize();
         }
 
         public override void Update(GameTime gameTime)
@@ -71,8 +77,14 @@ namespace Neuro_Shoot_the_Drones
         //TODO: Consider making HitableComponent
         public void Hit(int damage)
         {
+            OnHit?.Invoke();
             Health -= damage;
             if (Health <= 0) OnDeath?.Invoke();
+        }
+        
+        public void GeneratePattern(List<EnemyBullet> bullets)
+        {
+            OnPatternGenerated(bullets);
         }
     }
 }

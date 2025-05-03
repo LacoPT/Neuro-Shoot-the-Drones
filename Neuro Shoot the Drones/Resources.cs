@@ -14,10 +14,17 @@ namespace Neuro_Shoot_the_Drones
         private static Texture2D gameFrameUI;
         private static Texture2D bulletTextureAtlas;
         private static Texture2D drone;
+        private static Texture2D lightDrone;
+        private static Texture2D minawan;
+        private static SpriteFont defaultFont;
 
         public static Texture2D PlayerTextureAtlas { get => playerTextureAtlas; set => playerTextureAtlas = playerTextureAtlas == null? value : playerTextureAtlas; }
         public static Texture2D GameFrameUI { get => gameFrameUI; set => gameFrameUI = gameFrameUI == null? value : gameFrameUI; }
         public static Texture2D BulletTextureAtlas { get => bulletTextureAtlas; set => bulletTextureAtlas = bulletTextureAtlas == null? value : gameFrameUI; }
         public static Texture2D Drone { get => drone; set => drone = drone == null ? value : drone; }
+        public static Texture2D Minawan { get => minawan; set => minawan = minawan == null ? value : minawan; }
+        public static Texture2D LightDrone { get => lightDrone; set => lightDrone = lightDrone == null ? value : lightDrone; }
+        public static SpriteFont DefaultFont { get => defaultFont; set => defaultFont = defaultFont == null ? value : defaultFont; }
+        public static Texture2D BlackPixel;
     }
 }

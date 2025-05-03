@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Neuro_Shoot_the_Drones.Gameplay;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Neuro_Shoot_the_Drones
     //TODO: Consider making PatternID
     interface IBulletHellPattern
     {
-        public void Generate();
+        public List<EnemyBullet> Generate();
         public void UpdatePosition(Vector2 newPosition);
     }
 }

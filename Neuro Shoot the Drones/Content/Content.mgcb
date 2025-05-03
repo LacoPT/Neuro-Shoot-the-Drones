@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:atlas.png;PlayerAtlas.png
 
+#begin blackPixel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:blackPixel.png
+
 #begin drone.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -37,6 +49,13 @@
 /processorParam:TextureFormat=Color
 /build:drone.png
 
+#begin File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:File.spritefont;DefaultFont.spritefont
+
 #begin GameFrame.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -48,6 +67,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:GameFrame.png
+
+#begin lightdrone.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:lightdrone.png
+
+#begin minasona.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:minasona.png;minawan.png
 
 #begin PC Computer - Touhou Seirensen Undefined Fantastic Object - Bullets and Items.png
 /importer:TextureImporter

@@ -13,8 +13,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
     //TODO: Consider making OnActionJustPressed and OnKeyJustReleased
     //TODO: Think of a way to avoid passing GameTime to Key actions, because that is often unused and violate Single Responsibility principle
     //TODO: Think of a way to bing multiple Keys to one Action
-    //TODO: Rename into ControlSystem
-    internal class ControlComponent
+    internal class ControlSystem
     {
         Dictionary<Keys, Action<GameTime>> KeyDownActions = new();
         Dictionary<Keys, Action<GameTime>> KeyUpActions = new();

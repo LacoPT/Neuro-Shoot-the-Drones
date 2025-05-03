@@ -25,7 +25,6 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.Patterns
         {
             this.Count = count;
             this.Rate = rate;
-            this.Target = BulletHell.PlayerPosition;
             this.Position = position;
 
             Spread = MathF.PI * (1 - MathF.Exp(-Rate * (Count - 1)));
@@ -34,22 +33,28 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.Patterns
             TargetAngle = Position.LookAt(Target);
         }
 
-        public void Generate()
+        public List<EnemyBullet> Generate()
         {
+            var result = new List<EnemyBullet>();
             for(int i  = 0; i < Count; i++)
             {
                 var angle = TargetAngle + StartAngle + Step * i;
                 var bullet = EnemyBulletFactory.CreateStandart(Position);
                 bullet.Rotation = angle - MathF.PI / 2;
-                BulletHell.CreateEnemyBullet(bullet);
+                result.Add(bullet);
             }
+            return result;
         }
 
         public void UpdatePosition(Vector2 newPosition)
         {
-            Target = BulletHell.PlayerPosition;
             Position = newPosition;
             TargetAngle = Position.LookAt(Target);
+        }
+
+        public void UpdateTargetPosition(Vector2 newPosition)
+        {
+            Target = newPosition;
         }
     }
 }

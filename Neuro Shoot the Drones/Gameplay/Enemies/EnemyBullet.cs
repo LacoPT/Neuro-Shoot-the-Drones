@@ -7,18 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neuro_Shoot_the_Drones
+namespace Neuro_Shoot_the_Drones.Gameplay
 {
-    internal class EnemyBullet : GameEntity
+/*    internal class EnemyBullet : GameEntity
     {
         public float BasicSpeed { get; private set; }
         public Vector2 Velocity { get; private set; }
         public Vector2 Acceleration { get; private set; }
         public float RotationSpeed { get; private set; } = 0;
         public float RotationAcceleration { get; private set; } = 0;
-
-        public delegate void OnDestroyHandler();
-        public event OnDestroyHandler OnDestroy;
 
         public EnemyBullet(Rectangle textureSourceRect,
             Vector2 textureScale,
@@ -65,7 +62,6 @@ namespace Neuro_Shoot_the_Drones
 
         public override void Initialize()
         {
-            //TODO: Add CollisionComponent behaviour here
         }
 
         public override void Update(GameTime gameTime)
@@ -75,5 +71,38 @@ namespace Neuro_Shoot_the_Drones
 
             base.Update(gameTime);
         }
+    }*/
+
+    internal class EnemyBullet : BaseBullet
+    {
+        public float RotationSpeed;
+        public float RotationAcceleration;
+
+        public EnemyBullet
+            (
+                Texture2D texture,
+                Rectangle textureSourceRect,
+                Vector2 textureScale,
+                Vector2 position,
+                float baseSpeed,
+                float acceleration,
+                float rotationSpeed,
+                float rotationAcceleration,
+                int hitCircleSize
+            ): base(texture, textureSourceRect, textureScale, position, baseSpeed, acceleration)
+        {
+            RotationSpeed = rotationSpeed;
+            RotationAcceleration = rotationAcceleration;
+            CollisionComponent = new(hitCircleSize, CollisionLayers.Player, CollisionLayers.EnemyBullet, new CollisionData(0));
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            RotationSpeed += RotationAcceleration;
+            Rotation += RotationSpeed;
+
+            base.Update(gameTime);
+        }
     }
+
 }

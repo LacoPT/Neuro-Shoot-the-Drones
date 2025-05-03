@@ -42,6 +42,10 @@ namespace Neuro_Shoot_the_Drones
             Resources.GameFrameUI = Content.Load<Texture2D>("GameFrame");
             Resources.BulletTextureAtlas = Content.Load<Texture2D>("Bullets");
             Resources.Drone = Content.Load<Texture2D>("drone");
+            Resources.LightDrone = Content.Load<Texture2D>("lightdrone");
+            Resources.Minawan = Content.Load<Texture2D>("minawan");
+            Resources.DefaultFont = Content.Load<SpriteFont>("DefaultFont");
+            Resources.BlackPixel = Content.Load<Texture2D>("blackPixel");
         }
 
         protected override void Update(GameTime gameTime)

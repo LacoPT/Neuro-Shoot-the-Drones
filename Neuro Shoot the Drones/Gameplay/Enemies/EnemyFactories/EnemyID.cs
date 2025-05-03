@@ -16,6 +16,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories
         public static void Initialize()
         {
             factories.Add(new Drone0());
+            factories.Add(new Minawan0());
+            factories.Add(new Minawan1());
         }
 
         public static Enemy Create(int id, Vector2 initialPosition)
