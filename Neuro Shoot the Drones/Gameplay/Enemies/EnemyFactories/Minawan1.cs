@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Neuro_Shoot_the_Drones.Gameplay.Enemies.Patterns;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories
             tween.OnUpdate += () => minawan.Position.Y = initialPosition.Y - amplitude * MathF.Abs(MathF.Sin(tween.Value));
             for(int i = 0; i < 5; i++)
             {
-                var pattern = new SimpleCircularPattern(7, initialPosition, MathF.PI * 2f / 5f * (float)i);
+                var pattern = new WhirlCircularPattern(7, initialPosition, MathF.PI * 2f / 5f * (float)i);
                 minawan.Shoot(0.05 + (float)i * 3 / 5, pattern);
             }
             minawan.AddTween(tween);

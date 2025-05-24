@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories;
+using Neuro_Shoot_the_Drones.Menus;
 
 namespace Neuro_Shoot_the_Drones
 {
     //TODO: Finish architecture migration to ECS
-    //TODO: Add collsions check
-    //TODO: Add Player stats - Health, Bombs, Score, Graze, Power
+    //TODO: Add Player stats - Graze, Power
+    //TODO: Make Bombs
     //TODO: Add levels System
     //TODO: Add bosses to architecture
     //TODO: Consider making ID superclass for EnemyID, PatternID or LevelID
@@ -16,6 +17,9 @@ namespace Neuro_Shoot_the_Drones
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private GameplayScene MainGameplayScene = new GameplayScene();
+        //TODO: Make a scene Maanager
+        private PauseScene PauseScene = new PauseScene();
         private IGameScene currentScene = new GameplayScene();
 
         public MainGame()
@@ -32,7 +36,16 @@ namespace Neuro_Shoot_the_Drones
             //!!! DO NOT DO ANYTHING BEFORE base.Initialize() !!!
             base.Initialize();
             EnemyID.Initialize();
+            currentScene = MainGameplayScene;
             currentScene.Initialize();
+            PauseScene.Initialize();
+            MainGameplayScene.OnPause += (lastFrame) =>
+            {
+                currentScene = PauseScene;
+                PauseScene.SetLastFrame(lastFrame);
+            };
+
+            PauseScene.OnUnpause += () => currentScene = MainGameplayScene;
         }
 
         protected override void LoadContent()
@@ -44,14 +57,15 @@ namespace Neuro_Shoot_the_Drones
             Resources.Drone = Content.Load<Texture2D>("drone");
             Resources.LightDrone = Content.Load<Texture2D>("lightdrone");
             Resources.Minawan = Content.Load<Texture2D>("minawan");
-            Resources.DefaultFont = Content.Load<SpriteFont>("DefaultFont");
+            Resources.DefaultFont = Content.Load<SpriteFont>("ActualFontMap");
+            Resources.DefaultFont.Spacing = -6;
             Resources.BlackPixel = Content.Load<Texture2D>("blackPixel");
+            Resources.HealthBarAtlas = Content.Load<Texture2D>("HealthBarAtlas");
+            Resources.GrayScale = Content.Load<Effect>("GrayScale");
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
             base.Update(gameTime);
             currentScene.Update(gameTime);
         }

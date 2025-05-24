@@ -26,11 +26,19 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
             {
                 Enemies.Remove(enemy);
             }
+            EnemiesToRemove.Clear();
 
             foreach(var enemy in Enemies)
             {
                 enemy.Update(gameTime);
             }
+        }
+
+        public void CreateEnemy(Enemy enemy)
+        {
+            Enemies.Add(enemy);
+            enemy.OnDestroy += () => EnemiesToRemove.Add(enemy);
+            enemy.Initialize();
         }
     }
 }

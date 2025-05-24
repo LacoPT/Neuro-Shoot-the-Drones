@@ -12,5 +12,8 @@ namespace Neuro_Shoot_the_Drones
     {
         public static Point Resolution = new(1920, 1080);
         public static Rectangle VisibleGameplayArea = new Rectangle(350, 50, 650, 980);
+        public static Vector2 PlayerInitialPosition =new(VisibleGameplayArea.Left + VisibleGameplayArea.Width / 2,
+                                                        VisibleGameplayArea.Bottom - VisibleGameplayArea.Height / 5);
+ 
     }
 }

@@ -45,6 +45,7 @@ namespace Neuro_Shoot_the_Drones
         public void Destroy()
         {
             OnDestroy?.Invoke();
+            OnDestroy = null;
         }
     }
 }

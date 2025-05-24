@@ -18,6 +18,10 @@ namespace Neuro_Shoot_the_Drones.Gameplay
         Dictionary<Keys, Action<GameTime>> KeyDownActions = new();
         Dictionary<Keys, Action<GameTime>> KeyUpActions = new();
 
+        Dictionary<Keys, Action> KeyJustDownActions = new();
+        KeyboardState previousState;
+
+
         public void BindKeyDownAction(Keys key, Action<GameTime> action)
         {
             KeyDownActions[key] = action;
@@ -28,8 +32,27 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             KeyUpActions[key] = action;
         }
 
+        public void UnbindKeyUp(Keys key)
+        {
+            KeyUpActions.Remove(key);
+        }
+
+        public void UnbindKeyDown(Keys key)
+        {
+            KeyDownActions.Remove(key);
+        }
+
+        public void BindKeyJustDownAction(Keys key, Action action)
+        {
+            KeyJustDownActions[key] = action;
+        }
+        public void UnbindKeyJustDown(Keys key)
+        {
+            KeyJustDownActions.Remove(key);
+        }
         public void Update(GameTime gameTime)
         {
+            var currentState = Keyboard.GetState();
             foreach (var key in KeyDownActions.Keys)
             {
                 if (Keyboard.GetState().IsKeyDown(key))
@@ -44,6 +67,14 @@ namespace Neuro_Shoot_the_Drones.Gameplay
                     KeyUpActions[key](gameTime);
                 }
             }
+            foreach(var key in KeyJustDownActions.Keys)
+            {
+                if(previousState.IsKeyUp(key) && currentState.IsKeyDown(key))
+                {
+                    KeyJustDownActions[key]();
+                }
+            }
+            previousState = currentState;
         }
     }
 }

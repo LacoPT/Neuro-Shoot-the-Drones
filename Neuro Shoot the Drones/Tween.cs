@@ -46,7 +46,7 @@ namespace Neuro_Shoot_the_Drones
                 Timer = EndTime;
             }
             Value = StartValue + (EndValue - StartValue) * Easings.Interpolate((float)(Timer / EndTime), EasingType);
-            OnUpdate();
+            OnUpdate?.Invoke();
         }
         public void Reset()
         {

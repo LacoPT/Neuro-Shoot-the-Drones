@@ -94,12 +94,13 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             RotationSpeed = rotationSpeed;
             RotationAcceleration = rotationAcceleration;
             CollisionComponent = new(hitCircleSize, CollisionLayers.Player, CollisionLayers.EnemyBullet, new CollisionData(0));
+            CollisionComponent.OnCollisionRegistered += (data) => Destroy();
         }
 
         public override void Update(GameTime gameTime)
         {
-            RotationSpeed += RotationAcceleration;
-            Rotation += RotationSpeed;
+            RotationSpeed += RotationAcceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Rotation += RotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             base.Update(gameTime);
         }

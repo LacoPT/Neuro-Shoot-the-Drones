@@ -26,6 +26,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay
         //OR MAYBE this could be the companion's work
         public delegate void ShootEventHandler(Vector2 Position);
         public event ShootEventHandler OnShoot;
+        public delegate void HurtEventHandler();
+        public event HurtEventHandler OnHurt;
 
         private readonly static Vector2[] Directions = new Vector2[]
         {
@@ -34,8 +36,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             new(0, -1),
             new(0, 1)
         };
-        private static Vector2 StartPosition = new(GlobalVariables.VisibleGameplayArea.Left + GlobalVariables.VisibleGameplayArea.Width / 2,
-                                                   GlobalVariables.VisibleGameplayArea.Bottom - GlobalVariables.VisibleGameplayArea.Height / 5);
+        public readonly static Vector2 StartPosition = GlobalVariables.PlayerInitialPosition;
         public Vector2 Direction { get; private set; } = new();
         public bool Focused { get; private set; }
 
@@ -43,7 +44,10 @@ namespace Neuro_Shoot_the_Drones.Gameplay
 
         public Player()
         {
-            CollisionComponent = new(HitCircleSize, CollisionLayers.Player, CollisionLayers.EnemyBullet, new CollisionData(0));
+            //May be too big right now, i'll change it later
+            HitCircleSize = 8;
+            CollisionComponent = new(HitCircleSize, CollisionLayers.EnemyBullet, CollisionLayers.Player, new CollisionData(0));
+            CollisionComponent.OnCollisionRegistered += (data) => Hurt();
         }
 
         public override void Initialize()
@@ -55,6 +59,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
                                     textureSourceRect, 
                                     new Vector2(75f / 200, 1f / 3),
                                     textureSourceRect.GetRelativeCenter());
+            base.Initialize();
         }
 
         public override void Update(GameTime gameTime)
@@ -103,6 +108,11 @@ namespace Neuro_Shoot_the_Drones.Gameplay
 
         private void ExitFocus()
         {
+        }
+
+        private void Hurt()
+        {
+            OnHurt();
         }
 
         //TODO: Rename
