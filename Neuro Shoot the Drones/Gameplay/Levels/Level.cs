@@ -23,6 +23,9 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Levels
         public BossFightEndHandler OnBossFightEnd;*/
 
         TimeLineComponent TimeLine = new();
+        public delegate void LevelEndedEventHandler();
+        public event LevelEndedEventHandler OnLevelEnded;
+
 
         public void Update(GameTime gameTime)
         {
@@ -34,35 +37,40 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Levels
         {
             TimeLine.AddElement(0, () =>
             {
-                var enemy = EnemyID.Create(0, new Vector2(400, -300));
+                var enemy = EnemyID.Create("Drone0", new Vector2(400, -300));
                 OnEnemySpawned(enemy);
             });
             TimeLine.AddElement(0.5, () =>
             {
-                var enemy = EnemyID.Create(0, new Vector2(550, -200));
+                var enemy = EnemyID.Create("Drone0", new Vector2(550, -200));
                 OnEnemySpawned(enemy);
             });
             TimeLine.AddElement(1, () =>
             {
-                var enemy = EnemyID.Create(0, new Vector2(700, -150));
+                var enemy = EnemyID.Create("Drone0", new Vector2(700, -150));
                 OnEnemySpawned(enemy);
             });
             TimeLine.AddElement(1.5, () =>
             {
-                var enemy = EnemyID.Create(0, new Vector2(850, -250));
+                var enemy = EnemyID.Create("Drone0", new Vector2(850, -250));
                 OnEnemySpawned(enemy);
             });
 
             TimeLine.AddElement(8, () =>
             {
-                var enemy = EnemyID.Create(1, new Vector2(300, 500));
+                var enemy = EnemyID.Create("Minawan0", new Vector2(300, 500));
                 OnEnemySpawned(enemy);
             });
 
             TimeLine.AddElement(9, () =>
             {
-                var enemy = EnemyID.Create(2, new Vector2(GlobalVariables.VisibleGameplayArea.Right + 150, 400));
+                var enemy = EnemyID.Create("Minawan1", new Vector2(ResolutionData.VisibleGameplayArea.Right + 150, 400));
                 OnEnemySpawned(enemy);
+            });
+
+            TimeLine.AddElement(60, () =>
+            {
+                OnLevelEnded?.Invoke();
             });
 
             TimeLine.Start();

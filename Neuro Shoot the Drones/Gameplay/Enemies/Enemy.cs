@@ -14,6 +14,7 @@ namespace Neuro_Shoot_the_Drones
     internal class Enemy : GameEntity
     {
         public int Health { get; private set; }
+        public bool IsBoss { get; private set; } = false;
 
         public delegate void OnHitEventHandler();
         public delegate void OnDeathEventHandler();
@@ -85,6 +86,11 @@ namespace Neuro_Shoot_the_Drones
         public void GeneratePattern(List<EnemyBullet> bullets)
         {
             OnPatternGenerated(bullets);
+        }
+
+        public void ToggleBoss()
+        {
+            IsBoss = !IsBoss;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
                                    acceleration: 0,
                                    rotationSpeed: 0,
                                    rotationAcceleration: 0,
-                                   hitCircleSize: 16
+                                   hitCircleSize: 8 
                                    );
         }
     }

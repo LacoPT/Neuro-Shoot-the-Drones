@@ -38,6 +38,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
 
         readonly Color ScoreColor = new Color(255, 239, 239);
         Texture2D HealthBarAtlas;
+        //It is needed because i couldn't tile the atlas properly
         readonly Dictionary<HealthBarTile, Rectangle> TileMap = new()
         {
             { HealthBarTile.Empty, new Rectangle(0, 0, 80, 85) },

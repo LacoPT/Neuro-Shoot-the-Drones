@@ -36,29 +36,38 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             new(0, -1),
             new(0, 1)
         };
-        public readonly static Vector2 StartPosition = GlobalVariables.PlayerInitialPosition;
+        public readonly static Vector2 StartPosition = ResolutionData.PlayerInitialPosition;
         public Vector2 Direction { get; private set; } = new();
+        //TODO: Hitcircle appear animation
         public bool Focused { get; private set; }
+        bool DisplayHitcircle = false;
 
         private static Rectangle PlayerAllowedArea;
+        private DrawableComponent hitcircle;
 
         public Player()
         {
             //May be too big right now, i'll change it later
-            HitCircleSize = 8;
+            HitCircleSize = 4;
             CollisionComponent = new(HitCircleSize, CollisionLayers.EnemyBullet, CollisionLayers.Player, new CollisionData(0));
             CollisionComponent.OnCollisionRegistered += (data) => Hurt();
         }
 
         public override void Initialize()
         {
-            PlayerAllowedArea = GlobalVariables.VisibleGameplayArea.Grow(-HitCircleSize);
+            PlayerAllowedArea = ResolutionData.VisibleGameplayArea.Grow(-HitCircleSize);
             var textureSourceRect = new Rectangle(Point.Zero, new(200, 300));
             Position = StartPosition;
             DrawableComponent = new(Resources.PlayerTextureAtlas,
                                     textureSourceRect, 
                                     new Vector2(75f / 200, 1f / 3),
                                     textureSourceRect.GetRelativeCenter());
+
+            hitcircle = new(Resources.Hitcirle,
+                            Resources.Hitcirle.Bounds,
+                            Vector2.One,
+                            Resources.Hitcirle.Bounds.GetRelativeCenter());
+
             base.Initialize();
         }
 
@@ -68,6 +77,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             var currentSpeed = Speed * (1 - (Convert.ToInt32(Focused) * FocusedSlowDownCoofficient));
             Position += Direction * (float)gameTime.ElapsedGameTime.TotalSeconds * currentSpeed;
             Position = Position.RectClamp(PlayerAllowedArea);
+            DisplayHitcircle = Focused;
             ResetState();
 
             base.Update(gameTime);
@@ -76,6 +86,10 @@ namespace Neuro_Shoot_the_Drones.Gameplay
         public override void Draw(GameTime gameTime, SpriteBatch sb)
         {
             base.Draw(gameTime, sb);
+            if(DisplayHitcircle)
+            {
+                hitcircle.Draw(gameTime, sb, Position, 0f);
+            }
         }
 
         //NOTE: So we can record player's actions to a replay

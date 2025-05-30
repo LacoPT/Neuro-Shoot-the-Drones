@@ -101,7 +101,7 @@ namespace Neuro_Shoot_the_Drones
 
         public override void Update(GameTime gameTime)
         {
-            if (Position.Y < GlobalVariables.VisibleGameplayArea.Y)
+            if (Position.Y < ResolutionData.VisibleGameplayArea.Y)
                 Destroy();
 
             base.Update(gameTime);

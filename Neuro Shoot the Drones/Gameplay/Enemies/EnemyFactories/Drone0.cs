@@ -15,7 +15,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories
             var drone = new Enemy(5, 15, initialPosition, Resources.LightDrone, Resources.LightDrone.Bounds, Vector2.One / 1.3f);
                 drone.MoveByY(targetPosY, 0, 3, EasingType.CubicEaseOut);
                 drone.Shoot(3.1, new SimpleCircularPattern(16, Vector2.Zero, 0));
-                drone.MoveToX(GlobalVariables.VisibleGameplayArea.Center.X + GlobalVariables.VisibleGameplayArea.Width / 2 + 100, 3.2, 3, EasingType.CubicEaseInOut);
+                drone.MoveToX(ResolutionData.VisibleGameplayArea.Center.X + ResolutionData.VisibleGameplayArea.Width / 2 + 100, 3.2, 3, EasingType.CubicEaseInOut);
             return drone;
         }
     }

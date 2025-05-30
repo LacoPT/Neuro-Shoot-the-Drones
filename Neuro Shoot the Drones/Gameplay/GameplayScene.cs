@@ -32,8 +32,11 @@ namespace Neuro_Shoot_the_Drones
         private int _bombs = 0;
         private int _bombShards = 1;
 
+        //TODO: Change this to SceneManager
         public delegate void PauseEventHandler(RenderTarget2D lastFrame);
         public event PauseEventHandler OnPause;
+        public delegate void EndEventHandler();
+        public event EndEventHandler OnEnded;
 
         Tween PlayerRespawnTimer = new(0, 0);
         Tween PlayerRespawnAnimation = new(0, 0);
@@ -46,6 +49,7 @@ namespace Neuro_Shoot_the_Drones
         Level Level = new();
         RenderTarget2D LastFrame;
 
+        //TODO: Extract to UI model or something
         public int Score
         {
             get => _score;
@@ -55,8 +59,6 @@ namespace Neuro_Shoot_the_Drones
                 GUISystem.UpdateScore(value); // Sync with GUI
             }
         }
-
-        // Health property
         public int Health
         {
             get => _health;
@@ -67,8 +69,6 @@ namespace Neuro_Shoot_the_Drones
                 GUISystem.Health = Health; 
             }
         }
-
-        // HealthShards property
         public int HealthShards
         {
             get => _healthShards;
@@ -85,7 +85,6 @@ namespace Neuro_Shoot_the_Drones
             }
         }
 
-        // Bombs property
         public int Bombs
         {
             get => _bombs;
@@ -96,6 +95,7 @@ namespace Neuro_Shoot_the_Drones
                 GUISystem.Bombs = value; 
             }
         }
+
         public int BombShards
         {
             get => _bombShards;
@@ -126,22 +126,20 @@ namespace Neuro_Shoot_the_Drones
             LastFrame?.Dispose();
             //Draw the gameplay
             var graphicsDevice = sb.GraphicsDevice;
-            var gamePlayRenderTarget = new RenderTarget2D(graphicsDevice, GlobalVariables.Resolution.X, GlobalVariables.Resolution.Y);
+            var gamePlayRenderTarget = new RenderTarget2D(graphicsDevice, ResolutionData.Resolution.X, ResolutionData.Resolution.Y);
 
-            LastFrame = new RenderTarget2D(graphicsDevice, GlobalVariables.Resolution.X, GlobalVariables.Resolution.Y);
+            LastFrame = new RenderTarget2D(graphicsDevice, ResolutionData.Resolution.X, ResolutionData.Resolution.Y);
             graphicsDevice.SetRenderTarget(gamePlayRenderTarget);
             sb.Begin();
             BulletSystem.Draw(gameTime, sb);
             Player.Draw(gameTime, sb);
             EnemySystem.Draw(gameTime, sb);
             sb.Draw(Resources.GameFrameUI, new Vector2(250, 0), Color.White);
-            //sb.DrawString(Resources.DefaultFont, ScoreString, ScorePosition, ScoreColor, -float.Pi / 30, Vector2.Zero, 1, SpriteEffects.None, 0);
             sb.Draw(BlackPixel, LeftBlackBorder, Color.Black);
             sb.Draw(BlackPixel, RightBlackBorder, Color.Black);
             sb.End();
 
             //DrawUI
-            //var healthBarRenderTarget = DrawHealthBar(sb);
             var gui = GUISystem.DrawGUI(sb);
             graphicsDevice.SetRenderTarget(LastFrame);
 
@@ -164,8 +162,8 @@ namespace Neuro_Shoot_the_Drones
         public void Initialize()
         {
             BlackPixel = Resources.BlackPixel;
-            LeftBlackBorder = new(0, 0, 250, GlobalVariables.Resolution.Y);
-            RightBlackBorder = new(250 + Resources.GameFrameUI.Width, 0, 500, GlobalVariables.Resolution.Y);
+            LeftBlackBorder = new(0, 0, 250, ResolutionData.Resolution.Y);
+            RightBlackBorder = new(250 + Resources.GameFrameUI.Width, 0, 500, ResolutionData.Resolution.Y);
             SpawnPlayer();
             //NOTE: This is temporal decision
             Level.FillInTimeLine();
@@ -175,6 +173,7 @@ namespace Neuro_Shoot_the_Drones
             HealthShards = 2;
             BombShards = 1;
 
+            //TODO: There is definitely something wrong here
             Level.OnEnemySpawned += (enemy) =>
             {
                 EnemySystem.CreateEnemy(enemy);
@@ -198,6 +197,8 @@ namespace Neuro_Shoot_the_Drones
                 enemy.Initialize();
                 ControlSystem.BindKeyJustDownAction(Keys.Escape, Pause);
             };
+
+            Level.OnLevelEnded += () => OnEnded?.Invoke();
         }
 
         public void Update(GameTime gameTime)

@@ -19,7 +19,9 @@ namespace Neuro_Shoot_the_Drones.Gameplay
         Dictionary<Keys, Action<GameTime>> KeyUpActions = new();
 
         Dictionary<Keys, Action> KeyJustDownActions = new();
-        KeyboardState previousState;
+        //NOTE: it is static to prevent changing scenes from incorrectly read previous state
+        //e.g. pause menu immediately switches back to unpause
+        static KeyboardState previousState;
 
 
         public void BindKeyDownAction(Keys key, Action<GameTime> action)

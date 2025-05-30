@@ -12,7 +12,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories
     {
         public override Enemy Create(Vector2 initialPosition)
         {
-            var targetPosX = GlobalVariables.VisibleGameplayArea.Right + 100;
+            var targetPosX = ResolutionData.VisibleGameplayArea.Right + 100;
             var initialPositionY = initialPosition.Y;
             var amplitude = 100;
             var minawan = new Enemy(20, 20, initialPosition, Resources.Minawan, Resources.Minawan.Bounds, Vector2.One / 5);

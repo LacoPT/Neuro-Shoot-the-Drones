@@ -12,21 +12,21 @@ namespace Neuro_Shoot_the_Drones
     //TODO: Add levels System
     //TODO: Add bosses to architecture
     //TODO: Consider making ID superclass for EnemyID, PatternID or LevelID
-    //NOTE: It was to late to rewrite all of the code when i found out the existence of ComponentModel namespace
     public class MainGame : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private GameplayScene MainGameplayScene = new GameplayScene();
         //TODO: Make a scene Maanager
+        private GameplayScene MainGameplayScene = new GameplayScene();
         private PauseScene PauseScene = new PauseScene();
+        private GameEndScene GameEndScene = new GameEndScene();
         private IGameScene currentScene = new GameplayScene();
 
         public MainGame()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = GlobalVariables.Resolution.X;
-            _graphics.PreferredBackBufferHeight = GlobalVariables.Resolution.Y;
+            _graphics.PreferredBackBufferWidth = ResolutionData.Resolution.X;
+            _graphics.PreferredBackBufferHeight = ResolutionData.Resolution.Y;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -45,7 +45,9 @@ namespace Neuro_Shoot_the_Drones
                 PauseScene.SetLastFrame(lastFrame);
             };
 
+            MainGameplayScene.OnEnded += () => currentScene = GameEndScene;
             PauseScene.OnUnpause += () => currentScene = MainGameplayScene;
+            PauseScene.OnExit += Exit;
         }
 
         protected override void LoadContent()
@@ -62,6 +64,7 @@ namespace Neuro_Shoot_the_Drones
             Resources.BlackPixel = Content.Load<Texture2D>("blackPixel");
             Resources.HealthBarAtlas = Content.Load<Texture2D>("HealthBarAtlas");
             Resources.GrayScale = Content.Load<Effect>("GrayScale");
+            Resources.Hitcirle = Content.Load<Texture2D>("Hitcircle");
         }
 
         protected override void Update(GameTime gameTime)
