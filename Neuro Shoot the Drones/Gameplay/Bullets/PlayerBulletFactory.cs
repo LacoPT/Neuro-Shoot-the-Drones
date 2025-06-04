@@ -6,10 +6,11 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neuro_Shoot_the_Drones
+namespace Neuro_Shoot_the_Drones.Gameplay.Bullets
 {
     internal static class PlayerBulletFactory
     {
+        //TODO: Rewrite later, make different types of bullets
         public static PlayerBullet CreateStandartPlayerBullet(Vector2 position)
         {
             return new PlayerBullet(

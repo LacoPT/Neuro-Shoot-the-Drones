@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neuro_Shoot_the_Drones.Gameplay
+namespace Neuro_Shoot_the_Drones.Gameplay.Player
 {
-    internal class BossBar
+    internal class PlayerInputSettings
     {
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neuro_Shoot_the_Drones
+namespace Neuro_Shoot_the_Drones.Timeline
 {
     internal class TimeLineElement
     {
@@ -17,7 +17,7 @@ namespace Neuro_Shoot_the_Drones
 
         public event Action OnInvoke;
 
-        public void Invoke() 
+        public void Invoke()
         {
             OnInvoke?.Invoke();
         }

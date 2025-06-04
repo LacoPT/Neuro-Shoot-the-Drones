@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Neuro_Shoot_the_Drones.Gameplay.Enemies;
 using Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories;
+using Neuro_Shoot_the_Drones.Timeline;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +24,13 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Levels
         public delegate void BossFightEndHandler();
         public BossFightEndHandler OnBossFightEnd;*/
 
-        TimeLineComponent TimeLine = new();
+        public readonly TimeLineComponent TimeLine = new();
         public delegate void LevelEndedEventHandler();
         public event LevelEndedEventHandler OnLevelEnded;
 
 
         public void Update(GameTime gameTime)
         {
-            TimeLine.Update(gameTime);
         }
 
         //TODO: Delete this method, Level is a bse class (even if it won't have childs)

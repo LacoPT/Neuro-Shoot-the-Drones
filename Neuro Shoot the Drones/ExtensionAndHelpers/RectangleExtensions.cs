@@ -27,5 +27,12 @@ namespace Neuro_Shoot_the_Drones
         {
             return (rect.Center - rect.Location).ToVector2();
         }
+        public static bool InBounds(this Rectangle rectangle, Vector2 vector)
+        {
+            return vector.X >= rectangle.Left &&
+                   vector.X < rectangle.Right &&
+                   vector.Y >= rectangle.Top &&
+                   vector.Y < rectangle.Bottom;
+        }
     }
 }

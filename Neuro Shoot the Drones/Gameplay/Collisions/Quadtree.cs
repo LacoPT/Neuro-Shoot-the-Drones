@@ -25,7 +25,6 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Collisions
             nodes = new Quadtree[4];
         }
 
-        // Очищает узел и подузлы
         public void Clear()
         {
             objects.Clear();
@@ -36,7 +35,6 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Collisions
             }
         }
 
-        // Разбивает узел на 4 подузла
         private void Split()
         {
             int subWidth = bounds.Width / 2;
@@ -44,11 +42,10 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Collisions
             int x = bounds.X;
             int y = bounds.Y;
 
-            // Используем x,y и размер прямоугольника из XNA
-            nodes[0] = new Quadtree(level + 1, new Rectangle(x + subWidth, y, subWidth, subHeight)); // Top-right
-            nodes[1] = new Quadtree(level + 1, new Rectangle(x, y, subWidth, subHeight)); // Top-left
-            nodes[2] = new Quadtree(level + 1, new Rectangle(x, y + subHeight, subWidth, subHeight)); // Bottom-left
-            nodes[3] = new Quadtree(level + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight)); // Bottom-right
+            nodes[0] = new Quadtree(level + 1, new Rectangle(x + subWidth, y, subWidth, subHeight)); 
+            nodes[1] = new Quadtree(level + 1, new Rectangle(x, y, subWidth, subHeight)); 
+            nodes[2] = new Quadtree(level + 1, new Rectangle(x, y + subHeight, subWidth, subHeight)); 
+            nodes[3] = new Quadtree(level + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight)); 
         }
 
         private int GetIndex(CollisionComponent collider)

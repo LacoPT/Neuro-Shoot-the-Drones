@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Neuro_Shoot_the_Drones.ECS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Neuro_Shoot_the_Drones
+namespace Neuro_Shoot_the_Drones.Timeline
 {
     public enum TimeLineState
     {
@@ -15,12 +16,16 @@ namespace Neuro_Shoot_the_Drones
     }
 
     //BUG: Cannot add elements with the same Time key right now. 
-    internal class TimeLineComponent
+    //TODO: ECS MIGRATION NOTE: Make an actual Component
+    internal class TimeLineComponent : Component
     {
-        public double Time { get; private set;  } = 0 ;
-        Queue<TimeLineElement> timeLine = new();
+        //TODO: DELETE
+        static BaseEntity DUMMY = new BaseEntity(); 
+        public double Time { get; set; } = 0;
+        public Queue<TimeLineElement> TimeLine { get; private set; } = new();
         SortedList<double, TimeLineElement> elements = new();
-        TimeLineState state = TimeLineState.NotStarted;
+        public TimeLineState State { get; private set; } = TimeLineState.NotStarted;
+
 
         public delegate void OnStartEventHandler();
         public delegate void OnPauseEventHadler();
@@ -34,14 +39,22 @@ namespace Neuro_Shoot_the_Drones
         public event OnStopEventHaldler OnStop;
         public event OnFinishEventHandler OnFinish;
 
+        public TimeLineComponent(BaseEntity entity) : base(entity)
+        {
+        }
+
+        public TimeLineComponent() : base(DUMMY)
+        { }
+
+        //TODO: ECS MIGRATION NOTE: Remove, as Component should not have Update logic
         public void Update(GameTime gameTime)
         {
-            if(state != TimeLineState.Running) return;
-            if(timeLine.TryPeek(out var element))
+            if (State != TimeLineState.Running) return;
+            if (TimeLine.TryPeek(out var element))
             {
-                if(Time >= element.Time)
+                if (Time >= element.Time)
                 {
-                    timeLine.Dequeue();
+                    TimeLine.Dequeue();
                     element.Invoke();
                 }
             }
@@ -54,7 +67,7 @@ namespace Neuro_Shoot_the_Drones
 
         public TimeLineElement AddElement(double time, Action action)
         {
-            if(state != TimeLineState.NotStarted)
+            if (State != TimeLineState.NotStarted)
                 throw new Exception("Bad timeline usage!");
             var element = new TimeLineElement(time);
             element.OnInvoke += action;
@@ -64,39 +77,47 @@ namespace Neuro_Shoot_the_Drones
 
         public void Start()
         {
-            timeLine = new(elements.Values);
-            if (state != TimeLineState.NotStarted)
+            if (State != TimeLineState.NotStarted)
                 return;
-            state = TimeLineState.Running;
+            TimeLine = new(elements.Values);
+            State = TimeLineState.Running;
             OnStart?.Invoke();
         }
 
         public void Pause()
         {
-            if (state != TimeLineState.Running)
+            if (State != TimeLineState.Running)
                 return;
-            state = TimeLineState.Paused;
+            State = TimeLineState.Paused;
             OnPause?.Invoke();
         }
 
         public void Resume()
         {
-            if (state != TimeLineState.Paused)
+            if (State != TimeLineState.Paused)
                 return;
-            state = TimeLineState.Running;
+            State = TimeLineState.Running;
             OnResume?.Invoke();
         }
-           
+
         public void Stop()
         {
-            state = TimeLineState.Stopped;
+            State = TimeLineState.Stopped;
             OnStop?.Invoke();
         }
 
-        private void Finish()
+        public void Finish()
         {
-            state = TimeLineState.Finished;
+            State = TimeLineState.Finished;
             OnFinish?.Invoke();
+        }
+
+        public void Restart()
+        {
+            Time = 0;
+            TimeLine = new(elements.Values);
+            State = TimeLineState.Running;
+            OnStart?.Invoke();
         }
     }
 }

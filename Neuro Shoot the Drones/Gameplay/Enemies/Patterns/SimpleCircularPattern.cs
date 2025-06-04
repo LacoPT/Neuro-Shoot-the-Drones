@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Neuro_Shoot_the_Drones.Gameplay.Bullets;
+using Neuro_Shoot_the_Drones.Gameplay.CommonComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
 {
@@ -28,8 +31,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
             for(int i = 0; i < Count; i++)
             {
                 var b = EnemyBulletFactory.CreateStandart(Position);
-                b.Rotation = rotation;
-                //BulletHell.CreateEnemyBullet(b);
+                var transfrom = b.GetComponent<TransformComponent>();
+                transfrom.Rotation = rotation;
                 result.Add(b);
                 rotation += step;
             }

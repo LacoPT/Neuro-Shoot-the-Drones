@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Neuro_Shoot_the_Drones.Gameplay;
 using Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories;
 using Neuro_Shoot_the_Drones.Menus;
 
@@ -17,10 +18,11 @@ namespace Neuro_Shoot_the_Drones
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         //TODO: Make a scene Maanager
-        private GameplayScene MainGameplayScene = new GameplayScene();
+        //private GameplayScene MainGameplayScene = new GameplayScene();
+        private GameplayScene GamePlayScene;
         private PauseScene PauseScene = new PauseScene();
         private GameEndScene GameEndScene = new GameEndScene();
-        private IGameScene currentScene = new GameplayScene();
+        private IGameScene currentScene;
 
         public MainGame()
         {
@@ -35,18 +37,21 @@ namespace Neuro_Shoot_the_Drones
         {
             //!!! DO NOT DO ANYTHING BEFORE base.Initialize() !!!
             base.Initialize();
+
             EnemyID.Initialize();
-            currentScene = MainGameplayScene;
+            GamePlayScene = new();
+            currentScene = GamePlayScene;
             currentScene.Initialize();
             PauseScene.Initialize();
-            MainGameplayScene.OnPause += (lastFrame) =>
+/*            Ga.OnPause += (lastFrame) =>
             {
                 currentScene = PauseScene;
                 PauseScene.SetLastFrame(lastFrame);
             };
 
             MainGameplayScene.OnEnded += () => currentScene = GameEndScene;
-            PauseScene.OnUnpause += () => currentScene = MainGameplayScene;
+*/
+            //PauseScene.OnUnpause += () => currentScene = MainGameplayScene;
             PauseScene.OnExit += Exit;
         }
 

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-using Neuro_Shoot_the_Drones.Gameplay;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Neuro_Shoot_the_Drones.Gameplay.Controls;
 
 namespace Neuro_Shoot_the_Drones.Menus
 {
@@ -53,10 +53,10 @@ namespace Neuro_Shoot_the_Drones.Menus
 
         public void Initialize()
         {
-            ControlSystem.BindKeyJustDownAction(Keys.Escape, Unpause);
-            ControlSystem.BindKeyJustDownAction(Keys.Down, NextOption);
-            ControlSystem.BindKeyJustDownAction(Keys.Up, PreviousOption);
-            ControlSystem.BindKeyJustDownAction(Keys.Enter, () =>
+            ControlSystem.BindKeyJustPress(Keys.Escape, Unpause);
+            ControlSystem.BindKeyJustPress(Keys.Down, NextOption);
+            ControlSystem.BindKeyJustPress(Keys.Up, PreviousOption);
+            ControlSystem.BindKeyJustPress(Keys.Enter, () =>
             {
                 PauseMenuOptions[SelectedOption].Activate();
             });

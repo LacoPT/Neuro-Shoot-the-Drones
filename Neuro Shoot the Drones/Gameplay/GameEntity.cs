@@ -1,51 +1,45 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Neuro_Shoot_the_Drones.ECS;
 using Neuro_Shoot_the_Drones.Gameplay.Collisions;
+using Neuro_Shoot_the_Drones.Gameplay.CommonComponents;
+using Neuro_Shoot_the_Drones.Gameplay.Drawable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neuro_Shoot_the_Drones
+namespace Neuro_Shoot_the_Drones.Gameplay
 {
-    internal abstract class GameEntity
+    internal abstract class GameEntity : BaseEntity
     {
-        public int HitCircleSize;
-        public Vector2 Position = Vector2.Zero;
-        public float Rotation;
+        public delegate void InitializedEventHalder();
+        public event InitializedEventHalder OnInitialized;
 
-
-        public delegate void DestroyedEventHandler();
-        public event DestroyedEventHandler OnDestroy;
-        public delegate void InitializedEventHandler();
-        public event InitializedEventHandler OnInitialized;
-
-        //NOTE: It is recommeded to set value to CollisionComponent in the Constructor
-        public CollisionComponent CollisionComponent { get; protected set; }
-        public DrawableComponent DrawableComponent { get; protected set;  }
-
-        //NOTE: It is recommended to base.Inialize() ater Initializing child class
-        public virtual void Initialize() 
+        public GameEntity(Vector2 startPosition, float initialRotation = 0)
         {
+            var translation = new TransformComponent(this);
+            translation.Position = startPosition;
+            translation.Rotation = initialRotation;
+            AddComponent(translation);
+        }
+
+        //Template method
+        public void Initialize()
+        {
+            OnInitilize();
+
+            var translation = GetComponent<TransformComponent>();
+            var collision = GetComponent<CollisionComponent>();
+            var drawable = GetComponent<Drawable.DrawableComponent>();
+            if (collision == null || drawable == null)
+                throw new Exception("Either collision or drawable component is not set");
+            collision.Transform = translation;
+            drawable.Transform = translation;
             OnInitialized?.Invoke();
         }
-
-        //NOTE: It is recomended to base.Update(gameTime) after Updating child class
-        public virtual void Update(GameTime gameTime) 
+        protected virtual void OnInitilize()
         {
-            CollisionComponent.UpdatePosition(Position);
-        }
-
-        public virtual void Draw(GameTime gameTime, SpriteBatch sb) 
-        {
-            DrawableComponent.Draw(gameTime, sb, Position, Rotation);
-        }
-
-        public void Destroy()
-        {
-            OnDestroy?.Invoke();
-            OnDestroy = null;
         }
     }
 }
