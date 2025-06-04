@@ -1,0 +1,48 @@
+using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Neuro_Shoot_the_Drones.ECS
+{
+    internal class BaseEntity
+    {
+        public delegate void DestroyedEventHandler();
+        public event DestroyedEventHandler OnDestroy;
+
+        private Dictionary<Type, Component> Components = new();
+
+        public void AddComponent(Component component)
+        {
+            Components[component.GetType()] = component;
+        }
+
+        public T GetComponent<T>() where T: Component => (T) Components[typeof(T)];
+
+        public bool HasComponent<T>() where T : Component => Components.ContainsKey(typeof(T));
+
+        public List<Component> GetAllComponents() => Components.Values.ToList();
+
+        //If this caused exception, that means the entity is created withoud components which means no sense
+        public void Destroy()
+        {
+            OnDestroy();
+        }
+
+/*        public void RemoveComponent<T>() where T: Component
+        {
+            if(!HasComponent<T>()) return;
+            foreach(Component component in Components)
+            {
+                if(component is T)
+                {
+                    Components.Remove(component);
+                    component.Destroy();
+                }
+            }
+        }
+*/
+    }
+}

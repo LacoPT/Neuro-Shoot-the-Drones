@@ -6,19 +6,23 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neuro_Shoot_the_Drones
+namespace Neuro_Shoot_the_Drones.Tweens
 {
-    //TODO: Rewrite this shit
-    internal class Tween    { 
+    internal class Tween
+    {
+        bool DestroyOnEnd = true;
+        //TODO: Make with state enum
         public bool IsFinished = false;
         public bool IsStarted = false;
         public bool IsPaused = false;
-        public delegate void FinishHandler();
-        public delegate void UpdateHandler();
-        public delegate void StartHandler();
-        public event StartHandler OnStart;
-        public event FinishHandler OnFinish;
-        public event UpdateHandler OnUpdate;
+        public delegate void FinishEventHandler();
+        public delegate void UpdateEventHandler();
+        public delegate void StartEventHandler();
+        public delegate void DestroyedEventHandler();
+        public event StartEventHandler OnStart;
+        public event FinishEventHandler OnFinish;
+        public event UpdateEventHandler OnUpdate;
+        public event DestroyedEventHandler OnDestroy;
 
         public EasingType EasingType;
         float StartValue { get; set; }
@@ -27,7 +31,15 @@ namespace Neuro_Shoot_the_Drones
         public double Timer { get; private set; } = 0;
         readonly double EndTime = 0;
 
-        public Tween(float startValue, float endValue, double endTime = 1, EasingType easingType = EasingType.Linear)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startValue"></param>
+        /// <param name="endValue"></param>
+        /// <param name="endTime"></param>
+        /// <param name="easingType"></param>
+        /// <param name="destroyOnFinish">Is needed for TweenSystem, CAREFUL, if set to false, you need to manualy Destroy it</param>
+        public Tween(float startValue, float endValue, double endTime = 1, EasingType easingType = EasingType.Linear, bool destroyOnFinish = true)
         {
             StartValue = startValue;
             EndValue = endValue;
@@ -35,11 +47,12 @@ namespace Neuro_Shoot_the_Drones
             EasingType = easingType;
             Reset();
         }
+
         public void Update(GameTime gameTime)
         {
-            if(IsFinished || IsPaused || !IsStarted) return;
+            if (IsFinished || IsPaused || !IsStarted) return;
             Timer += gameTime.ElapsedGameTime.TotalSeconds;
-            if(Timer >= EndTime)
+            if (Timer >= EndTime)
             {
                 IsFinished = true;
                 OnFinish?.Invoke();
@@ -60,19 +73,19 @@ namespace Neuro_Shoot_the_Drones
             IsStarted = true;
             OnStart?.Invoke();
         }
-        
+
         public void Interrupt()
         {
             IsFinished = true;
             OnFinish?.Invoke();
         }
-        
+
         public void Pause()
         {
             if (!IsPaused)
                 IsPaused = true;
         }
-        
+
         public void Resume()
         {
             if (IsPaused)
@@ -85,6 +98,10 @@ namespace Neuro_Shoot_the_Drones
             OnUpdate();
             IsFinished = true;
             OnFinish?.Invoke();
+        }
+
+        public void Destroy()
+        {
         }
     }
 }

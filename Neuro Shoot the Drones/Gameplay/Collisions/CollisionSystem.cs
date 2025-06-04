@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Neuro_Shoot_the_Drones.ECS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,32 +9,28 @@ using System.Threading.Tasks;
 
 namespace Neuro_Shoot_the_Drones.Gameplay.Collisions
 {
-    internal class CollisionSystem
+    internal class CollisionSystem: BaseSystem
     {
         private readonly Rectangle worldBounds;
-        private readonly List<CollisionComponent> colliders = new List<CollisionComponent>();
-        private readonly List<CollisionComponent> collidersToRemove = new List<CollisionComponent>();
 
         private HashSet<(CollisionComponent, CollisionComponent)> processedPairs = new HashSet<(CollisionComponent, CollisionComponent)>();
 
-        public CollisionSystem(Rectangle worldBounds)
+        public CollisionSystem(Rectangle worldBounds) : base(typeof(CollisionComponent))
         {
             this.worldBounds = worldBounds;
         }
 
-        public void Update()
+        public override void OnUpdate(GameTime gameTime)
         {
-            foreach (var collider in collidersToRemove)
-                colliders.Remove(collider);
             Quadtree quadtree = new Quadtree(0, worldBounds);
-            foreach (var collider in colliders)
+            foreach (CollisionComponent collider in Components)
             {
                 quadtree.Insert(collider);
             }
 
             processedPairs.Clear();
 
-            foreach (var col in colliders)
+            foreach (CollisionComponent col in Components)
             {
                 List<CollisionComponent> potentialColliders = new List<CollisionComponent>();
                 quadtree.Retrieve(potentialColliders, col);
@@ -80,15 +78,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Collisions
             processedPairs.Add((col1, col2));
         }
 
-        public void AddCollider(CollisionComponent collider)
-        {
-            if (!colliders.Contains(collider))
-                colliders.Add(collider);
-        }
-
-        public void RemoveCollider(CollisionComponent collider)
-        {
-            collidersToRemove.Add(collider);
-        }
+        //NOTE: ECS MIGRATION NOTE: DEPRECATED
+        //public void AddCollider(CollisionComponent collider)
+        //public void RemoveCollider(CollisionComponent collider)
     }
 }

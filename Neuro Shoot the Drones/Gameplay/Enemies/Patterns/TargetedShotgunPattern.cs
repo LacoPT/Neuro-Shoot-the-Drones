@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Neuro_Shoot_the_Drones.Gameplay.Bullets;
+using Neuro_Shoot_the_Drones.Gameplay.CommonComponents;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,9 +41,10 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.Patterns
             for(int i  = 0; i < Count; i++)
             {
                 var angle = TargetAngle + StartAngle + Step * i;
-                var bullet = EnemyBulletFactory.CreateStandart(Position);
-                bullet.Rotation = angle - MathF.PI / 2;
-                result.Add(bullet);
+                var b = EnemyBulletFactory.CreateStandart(Position);
+                var transfrom = b.GetComponent<TransformComponent>();
+                transfrom.Rotation = angle - MathF.PI / 2;
+                result.Add(b);
             }
             return result;
         }

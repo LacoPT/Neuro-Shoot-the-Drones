@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Neuro_Shoot_the_Drones.Gameplay;
+using Neuro_Shoot_the_Drones.Gameplay.Bullets;
 using System;
 using System.Collections.Generic;
 using System.Linq;

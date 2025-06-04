@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
+namespace Neuro_Shoot_the_Drones.Gameplay.Bullets
 {
+    //TODO: Rewrite with EnemyBulletID or so
     internal static class EnemyBulletFactory
     {
         public static EnemyBullet CreateStandart(Vector2 position)
@@ -20,7 +21,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
                                    acceleration: 0,
                                    rotationSpeed: 0,
                                    rotationAcceleration: 0,
-                                   hitCircleSize: 8 
+                                   hitCircleSize: 8
                                    );
         }
     }

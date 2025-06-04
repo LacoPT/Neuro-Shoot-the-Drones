@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Neuro_Shoot_the_Drones.Gameplay.CommonComponents;
+using Neuro_Shoot_the_Drones.Timeline;
+using Neuro_Shoot_the_Drones.Tweens;
 using System;
 using System.Collections.Generic;
 using System.Formats.Tar;
@@ -13,18 +16,20 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
     {
         public static void MoveByX(this Enemy enemy, float by, double startOn, float duration, EasingType easing)
         {
-            float destination = enemy.Position.X + by;
+            var transform = enemy.GetComponent<TransformComponent>();
+            float destination = transform.Position.X + by;
             enemy.MoveToX(destination, startOn, duration, easing);
         }
 
         public static void MoveToX(this Enemy enemy, float to, double startOn, float duration, EasingType easing)
         {
-            enemy.TimeLine.AddElement(startOn, () =>
+            var timeLine = enemy.GetComponent<TimeLineComponent>();
+
+            timeLine.AddElement(startOn, () =>
             {
-                var tween = new Tween(enemy.Position.X, to, duration, easing);
-                //var oldPosition = enemy.Position;
-                //tween.OnUpdate += () => enemy.UpdatePosition(oldPosition.WithX(tween.Value));
-                tween.OnUpdate += () => enemy.Position.X = (tween.Value);
+                var transform = enemy.GetComponent<TransformComponent>();    
+                var tween = new Tween(transform.Position.X, to, duration, easing);
+                tween.OnUpdate += () => transform.Position.X = (tween.Value);
                 enemy.AddTween(tween);
                 tween.Start();
             });
@@ -33,47 +38,34 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
 
         public static void MoveByY(this Enemy enemy, float by, double startOn, float duration, EasingType easing)
         {
-            float destination = enemy.Position.Y + by;
+            var transform = enemy.GetComponent<TransformComponent>();
+            float destination = transform.Position.Y + by;
             enemy.MoveToY(destination, startOn, duration, easing);
         }
         public static void MoveToY(this Enemy enemy, float to, double startOn, float duration, EasingType easing)
         {
-            enemy.TimeLine.AddElement(startOn, () =>
+            var timeLine = enemy.GetComponent<TimeLineComponent>();
+            timeLine.AddElement(startOn, () =>
             {
-                var tween = new Tween(enemy.Position.Y, to, duration, easing);
-                var oldPosition = enemy.Position;
-                tween.OnUpdate += () => enemy.UpdatePosition(oldPosition.WithY(tween.Value));
+                var transform = enemy.GetComponent<TransformComponent>();
+                var tween = new Tween(transform.Position.Y, to, duration, easing);
+                var oldPosition = transform.Position;
+                tween.OnUpdate += () => transform.Position.Y = (tween.Value);
                 enemy.AddTween(tween);
                 tween.Start();
             });
         }
 
-        //BUG: !!! DO NOT USE !!!
-        //TODO: Fix the bug in TimeLineComponent with being unable to add keys with the same value
-        public static void MoveBy(this Enemy enemy, Vector2 by, double startOn, float duration, EasingType easing)
+        public static void Shoot(this  Enemy enemy, double time, IBulletHellPattern pattern)
         {
-            var destination = enemy.Position + by;
-            enemy.MoveTo(destination, startOn, duration, easing);
-        }
+            var timeLine = enemy.GetComponent<TimeLineComponent>();
 
-        //Do not use
-        public static void MoveTo(this Enemy enemy, Vector2 to, double startOn, float duration, EasingType easing)
-        {
-            enemy.MoveToX(to.X, startOn, duration, easing);
-            enemy.MoveToY(to.Y, startOn, duration, easing);
-        }
-
-        public static void Shoot(this Enemy enemy, double startOn, IBulletHellPattern pattern)
-        {
-            enemy.TimeLine.AddElement(startOn, () =>
+            timeLine.AddElement(time, () =>
             {
-                pattern.UpdatePosition(enemy.Position);
-                enemy.GeneratePattern(pattern.Generate());
+                var transform = enemy.GetComponent<TransformComponent>();
+                pattern.UpdatePosition(transform.Position);
+                enemy.ShotPattern(pattern.Generate());
             });
-        }
-
-        public static void MoveByCurve()
-        {
         }
     }
 }
