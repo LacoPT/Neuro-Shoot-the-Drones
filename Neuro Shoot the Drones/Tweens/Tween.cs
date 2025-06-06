@@ -10,7 +10,7 @@ namespace Neuro_Shoot_the_Drones.Tweens
 {
     internal class Tween
     {
-        bool DestroyOnEnd = true;
+        public bool DestroyOnEnd = true;
         //TODO: Make with state enum
         public bool IsFinished = false;
         public bool IsStarted = false;

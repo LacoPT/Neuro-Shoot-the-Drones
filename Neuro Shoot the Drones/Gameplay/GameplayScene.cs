@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Neuro_Shoot_the_Drones.Gameplay.Controls;
+using Neuro_Shoot_the_Drones.Gameplay.GUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,27 +14,42 @@ namespace Neuro_Shoot_the_Drones.Gameplay
     {
         EntityManager EntityManager = new();
         ControlSystem ControlSystem = new();
+        GUIModel GUIModel;
+        GUIView GUIView;
+        GUIController GUIController;
+
+        public GameplayScene()
+        {
+            GUIModel = new();
+            GUIView = new(GUIModel);
+            GUIController = new(GUIModel, GUIView);
+            EntityManager.OnEnemyDied += (data) => GUIModel.Score += data.Score;
+            EntityManager.OnPlayerHurt += () => GUIModel.Health -= 1;
+        }
 
         public void Draw(GameTime gameTime, SpriteBatch sb)
         {
-            var target = EntityManager.Draw(sb);
-            sb.GraphicsDevice.SetRenderTarget(null);
+            var gameplay = EntityManager.Draw(sb);
+            var gui = GUIView.Draw(sb);
             sb.Begin();
-            sb.Draw(target, Vector2.Zero, Color.White);
+            sb.Draw(gameplay, Vector2.Zero, Color.White);
             sb.Draw(Resources.GameFrameUI, new Vector2(250, 0), Color.White);
+            sb.Draw(gui, new Vector2(1070, 40), null, Color.White, -float.Pi / 30f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             sb.End();
-            target.Dispose();
+            gameplay.Dispose();
+            gui.Dispose();
         }
 
         public void Initialize()
         {
-            EntityManager.ControlSystem = new ControlSystem();
+            EntityManager.ControlSystem = ControlSystem;
             EntityManager.Initialize();
         }
 
         public void Update(GameTime gameTime)
         {
             EntityManager.Update(gameTime);
+            GUIController.Update(gameTime);
         }
     }
 }

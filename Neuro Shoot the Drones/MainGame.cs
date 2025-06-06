@@ -70,6 +70,7 @@ namespace Neuro_Shoot_the_Drones
             Resources.HealthBarAtlas = Content.Load<Texture2D>("HealthBarAtlas");
             Resources.GrayScale = Content.Load<Effect>("GrayScale");
             Resources.Hitcirle = Content.Load<Texture2D>("Hitcircle");
+            Resources.PickUpAtlas = Content.Load<Texture2D>("PickUpAtlas");
         }
 
         protected override void Update(GameTime gameTime)

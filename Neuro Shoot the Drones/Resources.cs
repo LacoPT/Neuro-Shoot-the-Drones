@@ -19,6 +19,7 @@ namespace Neuro_Shoot_the_Drones
         private static SpriteFont defaultFont;
         private static Texture2D healthBarAtlas;
         private static Texture2D hitcircle;
+        private static Texture2D pickUpAtlas;
 
         public static Texture2D PlayerTextureAtlas { get => playerTextureAtlas; set => playerTextureAtlas = playerTextureAtlas == null? value : playerTextureAtlas; }
         public static Texture2D GameFrameUI { get => gameFrameUI; set => gameFrameUI = gameFrameUI == null? value : gameFrameUI; }
@@ -31,5 +32,6 @@ namespace Neuro_Shoot_the_Drones
         public static Texture2D HealthBarAtlas {get => healthBarAtlas; set => healthBarAtlas = healthBarAtlas == null? value : healthBarAtlas; }
         public static Effect GrayScale;
         public static Texture2D Hitcirle { get => hitcircle; set => hitcircle = hitcircle == null ? value : hitcircle; }
+        public static Texture2D PickUpAtlas { get => pickUpAtlas; set => pickUpAtlas = pickUpAtlas == null ? value : pickUpAtlas; }
     }
 }

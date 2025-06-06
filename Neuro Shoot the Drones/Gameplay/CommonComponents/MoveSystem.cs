@@ -22,10 +22,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.CommonComponents
                 component.AngularSpeed += dt * component.AngularAcceleration;
                 component.Transform.Rotation += dt * component.AngularSpeed;
                 component.Velocity += dt * component.Acceleration;
-                if(component.Transform.Rotation != 0)
-                    component.Transform.Position += dt * component.Velocity.Rotated(component.Transform.Rotation);
-                else
-                    component.Transform.Position += dt * component.Velocity;
+                component.Transform.Position += dt * component.Velocity.Rotated(component.Transform.Rotation);
             }
         }
     }

@@ -33,6 +33,8 @@ namespace Neuro_Shoot_the_Drones.Tweens
         {
             if(Tweens.Contains(tween)) return;
             Tweens.Add(tween);
+            if (tween.DestroyOnEnd)
+                tween.OnFinish += () => RemoveTween(tween);
         }
 
         public void RemoveTween(Tween tween)

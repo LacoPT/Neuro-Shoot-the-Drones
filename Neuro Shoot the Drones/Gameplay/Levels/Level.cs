@@ -39,21 +39,26 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Levels
             TimeLine.AddElement(0, () =>
             {
                 var enemy = EnemyID.Create("Drone0", new Vector2(400, -300));
+                enemy.GetComponent<EnemyDeathDataComponent>().Drop = new() { new PickUps.PickUp(Vector2.Zero, PickUps.PickUpType.PowerSmall),
+                                                                             new PickUps.PickUp(Vector2.Zero, PickUps.PickUpType.PowerSmall) };
                 OnEnemySpawned(enemy);
             });
             TimeLine.AddElement(0.5, () =>
             {
                 var enemy = EnemyID.Create("Drone0", new Vector2(550, -200));
+                enemy.GetComponent<EnemyDeathDataComponent>().Drop = new() { new PickUps.PickUp(Vector2.Zero, PickUps.PickUpType.PowerBig) };
                 OnEnemySpawned(enemy);
             });
             TimeLine.AddElement(1, () =>
             {
                 var enemy = EnemyID.Create("Drone0", new Vector2(700, -150));
+                enemy.GetComponent<EnemyDeathDataComponent>().Drop = new() { new PickUps.PickUp(Vector2.Zero, PickUps.PickUpType.ScoreSmall) };
                 OnEnemySpawned(enemy);
             });
             TimeLine.AddElement(1.5, () =>
             {
                 var enemy = EnemyID.Create("Drone0", new Vector2(850, -250));
+                enemy.GetComponent<EnemyDeathDataComponent>().Drop = new() { new PickUps.PickUp(Vector2.Zero, PickUps.PickUpType.ScoreBig) };
                 OnEnemySpawned(enemy);
             });
 

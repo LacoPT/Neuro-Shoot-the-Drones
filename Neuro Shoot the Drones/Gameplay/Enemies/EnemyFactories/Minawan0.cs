@@ -29,6 +29,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories
                 var pattern = new WhirlCircularPattern(7, initialPosition, MathF.PI * 2f / 5f * (float)i);
                 minawan.Shoot(0.05 + (float)i * 3 / 5, pattern);
             }
+            minawan.GetComponent<EnemyDeathDataComponent>().Score = 200;
 
             minawan.OnInitialized += () =>
             {

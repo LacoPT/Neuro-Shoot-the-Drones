@@ -1,4 +1,5 @@
 ﻿using Neuro_Shoot_the_Drones.ECS;
+using Neuro_Shoot_the_Drones.Gameplay.PickUps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
     //TODO: Add drop from the Enemy
     internal class EnemyDeathDataComponent : Component
     {
-        int Score = 0;
+        public int Score = 0;
+        public List<PickUp> Drop = new();
         public EnemyDeathDataComponent(BaseEntity entity, int score) : base(entity)
         {
             Score = score;

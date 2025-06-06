@@ -11,7 +11,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Collisions
     {
         public readonly int Damage;
 
-        public CollisionData(int damage)
+        public CollisionData(int damage = 0)
         {
             Damage = damage;
         }

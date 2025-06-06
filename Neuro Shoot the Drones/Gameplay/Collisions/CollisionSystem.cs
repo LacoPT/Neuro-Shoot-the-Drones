@@ -23,15 +23,17 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Collisions
         public override void OnUpdate(GameTime gameTime)
         {
             Quadtree quadtree = new Quadtree(0, worldBounds);
-            foreach (CollisionComponent collider in Components)
+            foreach (CollisionComponent col in Components)
             {
-                quadtree.Insert(collider);
+                if(col.Skip) continue;
+                quadtree.Insert(col);
             }
 
             processedPairs.Clear();
 
             foreach (CollisionComponent col in Components)
             {
+                if(col.Skip) continue;
                 List<CollisionComponent> potentialColliders = new List<CollisionComponent>();
                 quadtree.Retrieve(potentialColliders, col);
 

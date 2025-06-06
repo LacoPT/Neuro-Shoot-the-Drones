@@ -1,4 +1,5 @@
 ﻿using Neuro_Shoot_the_Drones.ECS;
+using Neuro_Shoot_the_Drones.Gameplay.Enemies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.CommonComponents
 
         public void Die()
         {
+            var entity = (Enemy)Entity;
             OnDeath?.Invoke();
         }
     }
