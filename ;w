@@ -1,0 +1,29 @@
+using Microsoft.Xna.Framework;
+using Neuro_Shoot_the_Drones.Gameplay.CommonComponents;
+using Neuro_Shoot_the_Drones.Gameplay.Enemies;
+using Neuro_Shoot_the_Drones.Timeline;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Neuro_Shoot_the_Drones.Gameplay.Bosses
+{
+    internal static class DemoBoss
+    {
+        public static Boss Create()
+        {
+            var boss = new Boss(ResolutionData.PlayerInitialPosition, Resources.Cerb, Resources.Cerb.Bounds, Vector2.One, 32);
+            boss.Phases.Enqueue(FirstPhase(boss));
+            return boss;
+        }
+
+        static BossPhase FirstPhase(Boss boss)
+        {
+            var timeLine = new TimeLineComponent();
+            var Health = new HealthComponent(boss, 400);
+            var bossPhase = new BossPhase(false, 30f, health, timeLine, new EnemyDeathDataComponent(boss, 1000));
+        }
+    }
+}

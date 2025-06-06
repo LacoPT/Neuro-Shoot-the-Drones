@@ -1,37 +1,62 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace Neuro_Shoot_the_Drones
 {
-    //TODO: Instead of cheking for null, make an initialization method
     internal static class Resources
     {
-        private static Texture2D playerTextureAtlas;
-        private static Texture2D gameFrameUI;
-        private static Texture2D bulletTextureAtlas;
-        private static Texture2D drone;
-        private static Texture2D lightDrone;
-        private static Texture2D minawan;
-        private static SpriteFont defaultFont;
-        private static Texture2D healthBarAtlas;
-        private static Texture2D hitcircle;
-        private static Texture2D pickUpAtlas;
+        // Закрытые поля
+        private static Texture2D _playerTextureAtlas;
+        private static Texture2D _gameFrameUI;
+        private static Texture2D _bulletTextureAtlas;
+        private static Texture2D _drone;
+        private static Texture2D _lightDrone;
+        private static Texture2D _minawan;
+        private static SpriteFont _defaultFont;
+        private static Texture2D _healthBarAtlas;
+        private static Texture2D _hitCircle;
+        private static Texture2D _pickUpAtlas;
+        private static Texture2D _cerb;
+        private static Texture2D _blackPixel;
+        private static Effect _grayScale;
 
-        public static Texture2D PlayerTextureAtlas { get => playerTextureAtlas; set => playerTextureAtlas = playerTextureAtlas == null? value : playerTextureAtlas; }
-        public static Texture2D GameFrameUI { get => gameFrameUI; set => gameFrameUI = gameFrameUI == null? value : gameFrameUI; }
-        public static Texture2D BulletTextureAtlas { get => bulletTextureAtlas; set => bulletTextureAtlas = bulletTextureAtlas == null? value : gameFrameUI; }
-        public static Texture2D Drone { get => drone; set => drone = drone == null ? value : drone; }
-        public static Texture2D Minawan { get => minawan; set => minawan = minawan == null ? value : minawan; }
-        public static Texture2D LightDrone { get => lightDrone; set => lightDrone = lightDrone == null ? value : lightDrone; }
-        public static SpriteFont DefaultFont { get => defaultFont; set => defaultFont = defaultFont == null ? value : defaultFont; }
-        public static Texture2D BlackPixel;
-        public static Texture2D HealthBarAtlas {get => healthBarAtlas; set => healthBarAtlas = healthBarAtlas == null? value : healthBarAtlas; }
-        public static Effect GrayScale;
-        public static Texture2D Hitcirle { get => hitcircle; set => hitcircle = hitcircle == null ? value : hitcircle; }
-        public static Texture2D PickUpAtlas { get => pickUpAtlas; set => pickUpAtlas = pickUpAtlas == null ? value : pickUpAtlas; }
+
+        public static Texture2D PlayerTextureAtlas => _playerTextureAtlas;
+        public static Texture2D GameFrameUI => _gameFrameUI;
+        public static Texture2D BulletTextureAtlas => _bulletTextureAtlas;
+        public static Texture2D Drone => _drone;
+        public static Texture2D LightDrone => _lightDrone;
+        public static Texture2D Minawan => _minawan;
+        public static SpriteFont DefaultFont => _defaultFont;
+        public static Texture2D HealthBarAtlas => _healthBarAtlas;
+        public static Texture2D HitCircle => _hitCircle;
+        public static Texture2D PickUpAtlas => _pickUpAtlas;
+        public static Texture2D Cerb => _cerb;
+        public static Texture2D BlackPixel => _blackPixel;
+        public static Effect GrayScale => _grayScale;
+
+        public static void Initialize(ContentManager content)
+        {
+            if (content == null)
+                throw new System.ArgumentNullException(nameof(content));
+
+            _playerTextureAtlas = content.Load<Texture2D>("PlayerAtlas");
+            _gameFrameUI = content.Load<Texture2D>("GameFrame");
+            _bulletTextureAtlas = content.Load<Texture2D>("Bullets");
+            _drone = content.Load<Texture2D>("drone");
+            _lightDrone = content.Load<Texture2D>("lightdrone");
+            _minawan = content.Load<Texture2D>("minawan");
+            _defaultFont = content.Load<SpriteFont>("ActualFontMap");
+            _defaultFont.Spacing = -6;
+            _blackPixel = content.Load<Texture2D>("blackPixel");
+            _healthBarAtlas = content.Load<Texture2D>("HealthBarAtlas");
+            _grayScale = content.Load<Effect>("GrayScale");
+            _hitCircle = content.Load<Texture2D>("Hitcircle");
+            _pickUpAtlas = content.Load<Texture2D>("PickUpAtlas");
+            _cerb = content.Load<Texture2D>("Cerb");
+        }
     }
+
 }

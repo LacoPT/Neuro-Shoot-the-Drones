@@ -22,7 +22,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Bullets
             PlayerTranslation = playerTranslation;
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             foreach (var bullet in BulletsToDestroy)
             {
@@ -33,7 +33,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Bullets
             foreach(var bullet in Bullets)
             {
                 var position = bullet.GetComponent<TransformComponent>().Position;
-                if (!BulletAllowedArea.InBounds(position))
+                bullet.Time += gameTime.ElapsedGameTime.TotalSeconds;
+                if (!BulletAllowedArea.InBounds(position) || bullet.Time >= bullet.LifeTime)
                     bullet.Destroy();
             }    
         }

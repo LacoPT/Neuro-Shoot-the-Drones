@@ -99,8 +99,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Player
             var drawable = new Drawable.DrawableComponent(Player, Resources.PlayerTextureAtlas, TextureSourceRect,
                                                     TextureSourceRect.GetRelativeCenter(), TextureScale, transform: Transform, layerDepth: 0.1f);
             Player.AddComponent(drawable);
-            var hitCircleDrawable = new Drawable.DrawableComponent(HitCircle, Resources.Hitcirle, Resources.Hitcirle.Bounds,
-                                                             Resources.Hitcirle.Bounds.GetRelativeCenter(), Vector2.One, transform: Transform, layerDepth: 0.0f);
+            var hitCircleDrawable = new Drawable.DrawableComponent(HitCircle, Resources.HitCircle, Resources.HitCircle.Bounds,
+                                                             Resources.HitCircle.Bounds.GetRelativeCenter(), Vector2.One, transform: Transform, layerDepth: 0.0f);
             HitCircle.AddComponent(hitCircleDrawable);
         }
 

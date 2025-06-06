@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Neuro_Shoot_the_Drones.ECS;
+using Neuro_Shoot_the_Drones.Gameplay.Bosses;
 using Neuro_Shoot_the_Drones.Gameplay.Bullets;
 using Neuro_Shoot_the_Drones.Gameplay.Collisions;
 using Neuro_Shoot_the_Drones.Gameplay.CommonComponents;
@@ -93,6 +94,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
         {
             TimeLineSystem.AddComponent(DemoLevel.TimeLine);
             DemoLevel.OnEnemySpawned += SummonEnemy;
+            DemoLevel.OnBossSpawned += SummonBoss;
             DemoLevel.FillInTimeLine();
         }
 
@@ -118,7 +120,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             TweenSystem.Update(gameTime);
             TimeLineSystem.Update(gameTime);
             CollisionSystem.Update(gameTime);
-            BulletSystem.Update();
+            BulletSystem.Update(gameTime);
             DrawableSystem.Update(gameTime);
             HealthSystem.Update(gameTime);
         }
@@ -156,7 +158,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             enemy.OnDeath += (data) =>
             {
                 OnEnemyDied(data);
-                AddPickups(data.Drop, transform.Position);
+                SummonPickups(data.Drop, transform.Position);
             };
 
             EnemySystem.CreateEnemy(enemy);
@@ -168,7 +170,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             tween.Start();
         }
 
-        void AddPickups(List<PickUp> pickUps, Vector2 position)
+        void SummonPickups(List<PickUp> pickUps, Vector2 position)
         {
             const float spreadRate = 0.4f;
             var playerTransform = PlayerSystem.Transform;
@@ -220,6 +222,41 @@ namespace Neuro_Shoot_the_Drones.Gameplay
                 MoveSystem.AddComponent(move);
                 CollisionSystem.AddComponent(collision);
             }
+        }
+
+        void SummonBoss(Boss boss)
+        {
+            var collision = boss.GetComponent<CollisionComponent>();
+            var drawable = boss.GetComponent<Drawable.DrawableComponent>();
+            var transform = boss.GetComponent<TransformComponent>();
+
+
+            CollisionSystem.AddComponent(collision);
+            DrawableSystem.AddComponent(drawable);
+
+            boss.OnAddTween += AddTween;
+            boss.PhaseStarted += (phase) =>
+            {
+                TimeLineSystem.AddComponent(phase.TimeLine);
+                HealthSystem.AddComponent(phase.Health);
+                collision.OnCollisionRegistered += (data) =>
+                {
+                    phase.Health.Hurt(data.Damage);
+                };
+                phase.Health.OnDeath += () =>
+                {
+                    TimeLineSystem.RemoveComponent(phase.TimeLine);
+                    TimeLineSystem.RemoveComponent(phase.Health);
+                    boss.NextPhase();
+                };
+                phase.TimeLine.Start();
+            };
+            boss.OnFightEnded += () =>
+            {
+                DrawableSystem.RemoveComponent(drawable);
+                CollisionSystem.RemoveComponent(collision);
+            };
+            boss.NextPhase();
         }
 
 

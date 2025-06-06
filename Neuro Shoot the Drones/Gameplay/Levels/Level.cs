@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Neuro_Shoot_the_Drones.Gameplay.Bosses;
 using Neuro_Shoot_the_Drones.Gameplay.Enemies;
 using Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories;
 using Neuro_Shoot_the_Drones.Timeline;
@@ -17,6 +18,9 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Levels
         //NOTE: Do not use with '?', if the event was not binded to anything, that means the class is used wrong
         public delegate void EnemySpawnedEventHandler(Enemy enemy);
         public event EnemySpawnedEventHandler OnEnemySpawned;
+
+        public delegate void BossSpawnedEventHanlder(Boss boss);
+        public event BossSpawnedEventHanlder OnBossSpawned;
 
         //NOTE: other possible events. This could be used e.g. for 
 /*        public delegate void BossFightStartHandler();
@@ -72,6 +76,11 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Levels
             {
                 var enemy = EnemyID.Create("Minawan1", new Vector2(ResolutionData.VisibleGameplayArea.Right + 150, 400));
                 OnEnemySpawned(enemy);
+            });
+
+            TimeLine.AddElement(15, () =>
+            {
+                OnBossSpawned(DemoBoss.Create());
             });
 
             TimeLine.AddElement(60, () =>

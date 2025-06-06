@@ -59,7 +59,7 @@ namespace Neuro_Shoot_the_Drones.ECS
         public void RemoveComponent(Component component)
         {
             if (!Components.Contains(component))
-                throw new Exception("Component already removed");
+                return;
             ComponentsToRemove.Add(component);
 
             OnRemoveComponent(component);

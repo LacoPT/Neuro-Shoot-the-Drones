@@ -10,6 +10,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.CommonComponents
 {
     internal class HealthComponent : Component
     {
+        public readonly float MaxHealth;
         public float Health;
         /// <summary>
         ///     The maximum amount of damage that can be taken per tick / time piece
@@ -22,6 +23,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.CommonComponents
 
         public HealthComponent(BaseEntity entity, float health, float armour = float.PositiveInfinity) : base(entity)
         {
+            MaxHealth = health;
             Health = health;
             Armour = armour;
         }
@@ -33,7 +35,6 @@ namespace Neuro_Shoot_the_Drones.Gameplay.CommonComponents
 
         public void Die()
         {
-            var entity = (Enemy)Entity;
             OnDeath?.Invoke();
         }
     }

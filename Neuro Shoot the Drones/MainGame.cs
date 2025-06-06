@@ -58,19 +58,7 @@ namespace Neuro_Shoot_the_Drones
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Resources.PlayerTextureAtlas = Content.Load<Texture2D>("PlayerAtlas");
-            Resources.GameFrameUI = Content.Load<Texture2D>("GameFrame");
-            Resources.BulletTextureAtlas = Content.Load<Texture2D>("Bullets");
-            Resources.Drone = Content.Load<Texture2D>("drone");
-            Resources.LightDrone = Content.Load<Texture2D>("lightdrone");
-            Resources.Minawan = Content.Load<Texture2D>("minawan");
-            Resources.DefaultFont = Content.Load<SpriteFont>("ActualFontMap");
-            Resources.DefaultFont.Spacing = -6;
-            Resources.BlackPixel = Content.Load<Texture2D>("blackPixel");
-            Resources.HealthBarAtlas = Content.Load<Texture2D>("HealthBarAtlas");
-            Resources.GrayScale = Content.Load<Effect>("GrayScale");
-            Resources.Hitcirle = Content.Load<Texture2D>("Hitcircle");
-            Resources.PickUpAtlas = Content.Load<Texture2D>("PickUpAtlas");
+            Resources.Initialize(Content);
         }
 
         protected override void Update(GameTime gameTime)
