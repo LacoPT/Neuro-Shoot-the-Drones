@@ -43,7 +43,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.Patterns
                 var angle = TargetAngle + StartAngle + Step * i;
                 var b = EnemyBulletFactory.CreateStandart(Position);
                 var transfrom = b.GetComponent<TransformComponent>();
-                transfrom.Rotation = angle - MathF.PI / 2;
+                transfrom.Rotation = angle - MathF.PI / 8;
                 result.Add(b);
             }
             return result;

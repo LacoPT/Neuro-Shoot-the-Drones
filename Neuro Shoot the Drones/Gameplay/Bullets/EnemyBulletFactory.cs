@@ -17,11 +17,25 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Bullets
                                    textureSourceRect: new(1, 49, 16, 16),
                                    textureScale: Vector2.One,
                                    position: position,
-                                   baseSpeed: 500,
+                                   baseSpeed: 300,
                                    acceleration: 0,
                                    rotationSpeed: 0,
                                    rotationAcceleration: 0,
                                    hitCircleSize: 8
+                                   );
+        }
+
+        public static EnemyBullet CreateHeavy(Vector2 position)
+        {
+            return new EnemyBullet(texture: Resources.BulletTextureAtlas,
+                                   textureSourceRect: new(1, 292, 30, 30),
+                                   textureScale: Vector2.One,
+                                   position: position,
+                                   baseSpeed: 100,
+                                   acceleration: 0,
+                                   rotationSpeed: 0,
+                                   rotationAcceleration: 0,
+                                   hitCircleSize: 15
                                    );
         }
     }

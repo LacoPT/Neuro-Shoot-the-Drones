@@ -102,6 +102,7 @@ namespace Neuro_Shoot_the_Drones.Tweens
 
         public void Destroy()
         {
+            OnDestroy?.Invoke();
         }
     }
 }

@@ -106,6 +106,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Player
 
         public void Initialize()
         {
+            PlayerPosAccess.Set(Transform);
         }
 
         public void Update(GameTime gameTime)

@@ -13,7 +13,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Bullets
 {
     internal abstract class BaseBullet : GameEntity
     {
-        public readonly double LifeTime = 3f;
+        public readonly double LifeTime = 7f;
         public double Time = 0f;
         public BaseBullet(Texture2D texture, Rectangle textureSourceRect, Vector2 textureScale, Vector2 position, float baseSpeed, float acceleration, float rotation = 0)
         : base(position)

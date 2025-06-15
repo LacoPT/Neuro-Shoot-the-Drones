@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Neuro_Shoot_the_Drones.Gameplay.Enemies.Patterns;
 using System;
 using System.Collections.Generic;
@@ -19,10 +19,10 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies.EnemyFactories
 
             var pattern = new TargetedShotgunPattern(initialPosition + offset, 4, 0.2f);
 
-            drone.MoveByY(offset.Y, 0, 1.7f, EasingType.QuarticEaseOut);
+            drone.MoveByY(offset.Y, 0, 1.7f, EasingType.CircularEaseOut);
             drone.Shoot(1.4, pattern);
-            drone.MoveByY(-offset.Y, 5, 1.7f, EasingType.QuadraticEaseOut);
-            drone.Exit(7);
+            drone.MoveByY(-offset.Y, 4, 1.4f, EasingType.CircularEaseIn);
+            drone.Exit(6);
 
             return drone;
         }

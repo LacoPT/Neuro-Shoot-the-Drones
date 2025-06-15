@@ -30,9 +30,9 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
         /// <summary>
         ///  Use AddComponent with TimeLine component before Initializing
         /// </summary>
-        public Enemy(Texture2D texture, Rectangle textureSourceRect, Vector2 textureScale, Vector2 startPosition,
+        public Enemy(Texture2D texture, Rectangle textureSourceRect, Vector2 textureScale, Vector2 initialPosition,
             float initialRotation = 0, float health = 1, int hitCircleSize = 1, int score = 0)
-       : base(startPosition, initialRotation)
+       : base(initialPosition, initialRotation)
         {
             var drawable = new Drawable.DrawableComponent(this, texture, textureSourceRect, textureSourceRect.GetRelativeCenter(), textureScale, syncRotation: false);
             AddComponent(drawable);
@@ -45,7 +45,15 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
             AddComponent(timeLine);
             var deathData = new EnemyDeathDataComponent(this, score);
             AddComponent(deathData);
-            healthComponent.OnDeath += () => OnDeath(deathData);
+            healthComponent.OnDeath += () =>
+            {
+                foreach(var pickup in deathData.Drop)
+                {
+                    var pickupTransform = pickup.GetComponent<TransformComponent>();
+                    pickupTransform.Position = GetComponent<TransformComponent>().Position;
+                }
+                OnDeath(deathData);
+            };
             collision.OnCollisionRegistered += (data) => healthComponent.Hurt(data.Damage);
         }
 

@@ -7,7 +7,6 @@ namespace Neuro_Shoot_the_Drones
 {
     internal static class Resources
     {
-        // Закрытые поля
         private static Texture2D _playerTextureAtlas;
         private static Texture2D _gameFrameUI;
         private static Texture2D _bulletTextureAtlas;
@@ -21,6 +20,11 @@ namespace Neuro_Shoot_the_Drones
         private static Texture2D _cerb;
         private static Texture2D _blackPixel;
         private static Effect _grayScale;
+        private static Texture2D _gymbag;
+        private static Texture2D _gymbagConfused;
+        private static Texture2D _mainMenuBG;
+        private static Texture2D _endDeath;
+        private static Texture2D _endComplete;
 
 
         public static Texture2D PlayerTextureAtlas => _playerTextureAtlas;
@@ -36,7 +40,12 @@ namespace Neuro_Shoot_the_Drones
         public static Texture2D Cerb => _cerb;
         public static Texture2D BlackPixel => _blackPixel;
         public static Effect GrayScale => _grayScale;
+        public static Texture2D Gymbag => _gymbag;
+        public static Texture2D GymbagConfused => _gymbagConfused;
+        public static Texture2D MainMenuBG => _mainMenuBG;
+        public static Texture2D EndDeath => _endDeath;
 
+        public static Texture2D EndComplete => _endComplete;    
         public static void Initialize(ContentManager content)
         {
             if (content == null)
@@ -56,6 +65,11 @@ namespace Neuro_Shoot_the_Drones
             _hitCircle = content.Load<Texture2D>("Hitcircle");
             _pickUpAtlas = content.Load<Texture2D>("PickUpAtlas");
             _cerb = content.Load<Texture2D>("Cerb");
+            _gymbag = content.Load<Texture2D>("gymbag");
+            _gymbagConfused = content.Load<Texture2D>("gymbagconfused");
+            _mainMenuBG = content.Load<Texture2D>("MainMenuBG");
+            _endDeath = content.Load<Texture2D>("EndScreenDeath");
+            _endComplete = content.Load<Texture2D>("EndScreenComplete");
         }
     }
 

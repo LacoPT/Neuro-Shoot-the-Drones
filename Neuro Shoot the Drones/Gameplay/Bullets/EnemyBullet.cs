@@ -13,11 +13,13 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Bullets
     internal class EnemyBullet : BaseBullet
     {
         //NOTE: It's not recommended to create manually, use factory method instead
+        public float BaseSpeed = 0;
         public EnemyBullet(Texture2D texture, Rectangle textureSourceRect, Vector2 textureScale, Vector2 position, float baseSpeed, float acceleration,
             float rotation = 0, int hitCircleSize = 1, float rotationSpeed = 0, float rotationAcceleration = 0)
         : base(texture, textureSourceRect, textureScale, position, baseSpeed, acceleration, float.Pi + rotation)
         {
             var move = GetComponent<MoveComponent>();
+            BaseSpeed = baseSpeed;
             move.AngularSpeed = rotationSpeed;
             move.AngularAcceleration = rotationAcceleration;
             var data = new CollisionData(0);

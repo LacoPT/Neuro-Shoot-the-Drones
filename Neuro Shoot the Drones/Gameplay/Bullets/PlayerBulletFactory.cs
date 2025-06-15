@@ -24,5 +24,6 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Bullets
                 baseSpeed: 1200,
                 acceleration: 0);
         }
+
     }
 }

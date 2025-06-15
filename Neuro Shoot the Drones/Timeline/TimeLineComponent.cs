@@ -15,12 +15,11 @@ namespace Neuro_Shoot_the_Drones.Timeline
         Finished
     }
 
-    //BUG: Cannot add elements with the same Time key right now. 
     //TODO: ECS MIGRATION NOTE: Make an actual Component
     internal class TimeLineComponent : Component
     {
-        //TODO: DELETE
-        static BaseEntity DUMMY = new BaseEntity(); 
+        //NOTE: This exists so timeline could actually exist without entity, for example in levels
+        static BaseEntity DUMMY = new BaseEntity();
         public double Time { get; set; } = 0;
         public Queue<TimeLineElement> TimeLine { get; private set; } = new();
         SortedList<double, TimeLineElement> elements = new();
@@ -46,7 +45,6 @@ namespace Neuro_Shoot_the_Drones.Timeline
         public TimeLineComponent() : base(DUMMY)
         { }
 
-        //TODO: ECS MIGRATION NOTE: Remove, as Component should not have Update logic
         public void Update(GameTime gameTime)
         {
             if (State != TimeLineState.Running) return;
@@ -65,14 +63,21 @@ namespace Neuro_Shoot_the_Drones.Timeline
             Time += gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        public TimeLineElement AddElement(double time, Action action)
+        public void AddElement(double time, Action action)
         {
             if (State != TimeLineState.NotStarted)
                 throw new Exception("Bad timeline usage!");
-            var element = new TimeLineElement(time);
-            element.OnInvoke += action;
-            elements.Add(time, element);
-            return element;
+            if (!elements.ContainsKey(time))
+            {
+                var element = new TimeLineElement(time);
+                element.OnInvoke += action;
+                elements.Add(time, element);
+            }
+            else
+            {
+                var element = elements[time];
+                element.OnInvoke += action;
+            }
         }
 
         public void Start()

@@ -38,6 +38,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Bosses
             float destination = transform.Position.Y + by;
             boss.MoveToY(destination, startOn, duration, easing, timeLine);
         }
+
         public static void MoveToY(this Boss boss, float to, double startOn, float duration, EasingType easing, TimeLineComponent timeLine)
         {
             timeLine.AddElement(startOn, () =>

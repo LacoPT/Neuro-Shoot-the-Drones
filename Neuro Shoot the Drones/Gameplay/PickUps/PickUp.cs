@@ -29,6 +29,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay.PickUps
             Type = type;
             var sourceRect = AtlasData[type];
             var drawable = new DrawableComponent(this, Resources.PickUpAtlas, sourceRect, sourceRect.GetRelativeCenter(), Vector2.One, syncRotation: false);
+            if (type != PickUpType.PowerSmall && type != PickUpType.ScoreSmall)
+                drawable.Scale = Vector2.One / 1.5f;
             drawable.LayerDepth = 0.4f;
             AddComponent(drawable);
             var collision = new CollisionComponent(sourceRect.Width / 2, CollisionLayers.PlayerCollectZone, CollisionLayers.Pickup, new(), this);

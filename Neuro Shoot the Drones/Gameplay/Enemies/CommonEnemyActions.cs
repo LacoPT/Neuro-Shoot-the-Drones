@@ -16,9 +16,17 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
     {
         public static void MoveByX(this Enemy enemy, float by, double startOn, float duration, EasingType easing)
         {
-            var transform = enemy.GetComponent<TransformComponent>();
-            float destination = transform.Position.X + by;
-            enemy.MoveToX(destination, startOn, duration, easing);
+            var timeLine = enemy.GetComponent<TimeLineComponent>();
+
+            timeLine.AddElement(startOn, () =>
+            {
+                var transform = enemy.GetComponent<TransformComponent>();
+                var startX = transform.Position.X;
+                var tween = new Tween(0, by, duration, easing);
+                tween.OnUpdate += () => transform.Position.X = startX + tween.Value;
+                enemy.AddTween(tween);
+                tween.Start();
+            });
         }
 
         public static void MoveToX(this Enemy enemy, float to, double startOn, float duration, EasingType easing)
@@ -38,9 +46,17 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
 
         public static void MoveByY(this Enemy enemy, float by, double startOn, float duration, EasingType easing)
         {
-            var transform = enemy.GetComponent<TransformComponent>();
-            float destination = transform.Position.Y + by;
-            enemy.MoveToY(destination, startOn, duration, easing);
+            var timeLine = enemy.GetComponent<TimeLineComponent>();
+
+            timeLine.AddElement(startOn, () =>
+            {
+                var transform = enemy.GetComponent<TransformComponent>();
+                var startY = transform.Position.Y;
+                var tween = new Tween(0, by, duration, easing);
+                tween.OnUpdate += () => transform.Position.Y = startY + tween.Value;
+                enemy.AddTween(tween);
+                tween.Start();
+            });
         }
         public static void MoveToY(this Enemy enemy, float to, double startOn, float duration, EasingType easing)
         {
@@ -65,6 +81,16 @@ namespace Neuro_Shoot_the_Drones.Gameplay.Enemies
                 var transform = enemy.GetComponent<TransformComponent>();
                 pattern.UpdatePosition(transform.Position);
                 enemy.ShotPattern(pattern.Generate());
+            });
+        }
+
+        public static void Exit(this Enemy enemy, double time)
+        {
+            var timeLine = enemy.GetComponent<TimeLineComponent>();
+
+            timeLine.AddElement(time, () =>
+            {
+                enemy.Destroy();
             });
         }
     }

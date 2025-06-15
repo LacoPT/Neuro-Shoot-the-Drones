@@ -45,6 +45,8 @@ namespace Neuro_Shoot_the_Drones.Gameplay
         public delegate void EnemyDiedhEventHandler(EnemyDeathDataComponent data);
         public event EnemyDiedhEventHandler OnEnemyDied;
 
+        public event Action LevelCompleted;
+
         public ControlSystem ControlSystem;
 
 
@@ -58,9 +60,6 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             InitializePlayer();
             InitializeControls();
             InitializeLevel();
-
-            //var PUStartPosition = ResolutionData.PlayerInitialPosition - new Vector2(0, 500);
-            //AddPickups(CreateTestPickups(), PUStartPosition);
         }
 
         void InitializePlayer()
@@ -71,11 +70,12 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             DrawableSystem.AddComponent(hitCircleDrawable);
             MoveSystem.AddComponent(PlayerSystem.Move);
             PlayerSystem.OnShoot += SummonBullet;
-            //TODO: Add player hitcircles
+
             CollisionSystem.AddComponent(PlayerSystem.HitCircle.GetComponent<CollisionComponent>());
             CollisionSystem.AddComponent(PlayerSystem.CollectArea.GetComponent<CollisionComponent>());
             CollisionSystem.AddComponent(PlayerSystem.GrazeArea.GetComponent<CollisionComponent>());
             PlayerSystem.OnHurt += OnPlayerHurt.Invoke;
+            PlayerSystem.Initialize();
         }
 
         void InitializeControls()
@@ -95,7 +95,9 @@ namespace Neuro_Shoot_the_Drones.Gameplay
             TimeLineSystem.AddComponent(DemoLevel.TimeLine);
             DemoLevel.OnEnemySpawned += SummonEnemy;
             DemoLevel.OnBossSpawned += SummonBoss;
-            DemoLevel.FillInTimeLine();
+            DemoLevel.OnLevelEnded += () => LevelCompleted?.Invoke();
+            DemoLevel.FillInDemo();
+            //DemoLevel.FillInTest();
         }
 
         public RenderTarget2D Draw(SpriteBatch sb)
@@ -114,7 +116,6 @@ namespace Neuro_Shoot_the_Drones.Gameplay
 
         public void Update(GameTime gameTime)
         {
-            ControlSystem.Update(gameTime);
             PlayerSystem.Update(gameTime);
             MoveSystem.Update(gameTime);
             TweenSystem.Update(gameTime);
@@ -197,7 +198,7 @@ namespace Neuro_Shoot_the_Drones.Gameplay
                 {
                     transform.Rotation = 0;
                     move.Velocity = Vector2.Zero;
-                    move.Acceleration = new(0, 150f);
+                    move.Acceleration = new(0, 250f);
                 };
                 timer.Start();
 
